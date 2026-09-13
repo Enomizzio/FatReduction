@@ -1,5 +1,21 @@
 # Decisioni importanti
 
+## ADR-005 — Catalogo manuale, revisioni immutabili e resa dichiarata
+
+Status: Accepted — 2026-09-13, GATE 02.
+
+Catalogo inizialmente vuoto: nessun dataset esterno incluso e nessuna licenza alimentare da acquisire. L'utente trascrive una fonte (etichetta, database consultato o stima manuale); riferimento obbligatorio, URL http/https e data opzionali. Tutti i valori UI sono stime; nessuna fonte inventata o chiamata di rete. Fixture con numeri aritmetici fittizi, non alimenti di riferimento.
+
+IndexedDB v2 aggiunge foods, recipes, foodRevisions e recipeRevisions. Ogni salvataggio/archiviazione incrementa la revisione e scrive testa e copia immutabile nella stessa transazione; confronto revisione contro conflitti. Archivio reversibile, nessuna cancellazione fisica. Migrazione v1 additiva conserva il profilo. Nessun totale ricetta persistito.
+
+Quantità nella stessa unità hanno fattore 1; conversioni massa/volume solo se dichiarate con fonte nel dominio. UI con g/ml e porzioni dichiarate; unità non convertibili danno errore, senza densità implicita. Porzioni alimento con etichetta, quantità base e fonte; ricette con resa totale in g/ml e calcolo per quantità della preparazione. Nessun fattore di cottura o ritenzione inventato.
+
+Ingredienti ricetta congelano fonte, nutrienti, revisione e conversione; modificare quantità conserva la fonte storica, anche per alimenti archiviati. Sostituire una fonte richiede rimuovere e aggiungere l'ingrediente esplicitamente. Snapshot ricetta includono ingredientSnapshots per ricostruire tutte le fonti e conversioni: dipendenza necessaria dello storico, senza implementare menù o diario.
+
+Esclusioni per chiavi normalizzate, nomi e alias tartufo/tartufi/truffle/truffles. Per prodotti composti l'utente dichiara gli ingredienti; nessuna lettura automatica completa delle etichette o verifica allergeni. Le ricette propagano le chiavi degli ingredienti. Gli avvisi non impediscono conservazione nel catalogo o futuri consumi reali. Filtro delle proposte da integrare in GATE 03.
+
+Alternative escluse: dataset senza provenienza/licenza, calorie ricalcolate dai macro, conversioni implicite e aggiornamento automatico delle ricette al cambio catalogo. Questi confini mantengono ricostruibili i calcoli.
+
 ## ADR-004 — Fondazione, origine stabile e validazione
 
 Status: Accepted — 2026-09-13, GATE 01.

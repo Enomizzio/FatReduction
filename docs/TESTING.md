@@ -24,6 +24,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Validate-Documentati
 
 Bypass limitato a questo processo; verifica UTF-8, link, stati e checklist, non runtime o fonti remote. Risultati effettivi registrati nei Gate.
 
+## Evidenze GATE 01–02 — 2026-09-13
+
+GATE 01: npm ci, typecheck, lint, build, 3 test unitari/integrazione e 2 E2E PASS. GATE 02: 12 test Vitest (3 file), 4 E2E Chromium, typecheck, lint e build PASS, più validatore documentale. Nuove prove: migrazione v1/v2 senza perdita, versioni future rifiutate, revisioni e fonti immutate, rollback atomico, porzioni e resa, fibre null, esclusioni di ricetta, archiviazione/ripristino, input invalidi, quota con nuovo tentativo, istruzioni HTML inerti. Axe senza violazioni nelle viste esaminate; review visiva dell'agente su screenshot desktop e 320 px.
+
+Nessun dato reale inserito nei test: default di configurazione autorizzati e fixture aritmetiche inventate. Nessun test obbligatorio N/A nei due Gate. Audit release completo, screen reader umano, backup/import, altri browser e PWA non dichiarati eseguiti; appartengono al perimetro futuro.
+
 ## Strategia
 
 - Unitari: conversioni quantità, aggregazione, null delle fibre, date locali, validazioni, esclusioni e revisione. In GATE 01 coprire soltanto invarianti del profilo e inizializzazione senza sovrascrittura.

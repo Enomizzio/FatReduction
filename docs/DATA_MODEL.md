@@ -2,7 +2,7 @@
 
 ## Stato e convenzioni
 
-Profilo implementato in GATE 01; altre entità pianificate finché introdotte nei rispettivi Gate. Schema verificabile nei moduli di dominio e adapter in src.
+Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GATE 02. Entità GATE 03–06 ancora pianificate. Schema verificabile in domain/profile, domain/nutrition e storage/database.
 
 - `Id`: UUID stringa, generato localmente. `LocalDate`: data gregoriana reale `YYYY-MM-DD`, senza conversione automatica a UTC. `Instant`: timestamp ISO 8601 UTC per audit tecnico, non per decidere il giorno alimentare.
 - `number`: finito, mai `NaN`/infinito. Quantità positive, nutrienti non negativi. Precisione mantenuta nei calcoli, arrotondamento solo in presentazione.
@@ -23,6 +23,8 @@ Profilo implementato in GATE 01; altre entità pianificate finché introdotte ne
 | MealSlotDefinition | `key`: MealSlot; `label`: string | Chiavi uniche, etichette non vuote; l'ordine dell'array è quello dei pasti |
 
 Per una voce: nutrienti = nutrienti snapshot × quantità convertita / quantità base. La quantità memorizza il fattore usato, così una successiva conversione del catalogo non modifica lo storico.
+
+In GATE 02 catalogId/catalogRevision sempre presenti per snapshot da catalogo; caso manuale senza catalogo futuro. Snapshot ricetta aggiunge `ingredientSnapshots?: {snapshot: FoodSnapshot, quantity: Quantity}[]`, copie senza ricette annidate per conservare tutte le fonti/conversioni. Calcoli rifiutano overflow non finiti. URL massimo 2.000 caratteri; chiavi ingredienti/esclusioni massimo 100, porzioni massimo 20 con etichette uniche, ingredienti ricetta massimo 100 (limiti tecnici). Dati manuali richiedono isEstimate=true; UI marca stimate anche trascrizioni etichette/database.
 
 ## UserProfile — GATE 01
 
@@ -53,6 +55,8 @@ Non inserire automaticamente la baseline in BodyMeasurement. Cambiare la baselin
 `id: Id`, `revision: integer >=1`, `name: string`, `normalizedIngredientKeys: string[]`, `basisAmount: number >0` (normalmente 100), `basisUnit: g/ml`, `nutrients: Nutrients`, `source: NutritionSource`, `portionConversions: {label: string, basisQuantity: number >0, source: string}[]`, `archived: boolean`, `createdAt/updatedAt: Instant`.
 
 Ogni modifica incrementa revision. L'identità degli ingredienti supporta le esclusioni; il solo confronto del nome non basta. Fonti non note richiedono dichiarazione manuale stimata, mai provenienza inventata. Archiviare un alimento usato conserva i riferimenti; snapshot storici non vengono aggiornati.
+
+Il servizio integra nome e alias tartufo/tartufi nelle chiavi. Per prodotti composti l'utente dichiara gli ingredienti nell'app. Nessun catalogo iniziale o dato alimentare di terzi incluso.
 
 ## Recipe — GATE 02
 
@@ -91,3 +95,5 @@ Le fibre aggregate sono `null` se almeno una voce ha fibre sconosciute; eventual
 ## Persistenza e migrazioni
 
 Database `fatreduction`, versione 1 (GATE 01): store `profiles`, keyPath `id`. Unico profilo inizializzato in transazione readwrite, validato anche in lettura; numero pasti derivato. `dailyTargets` resta null. Nessuno store meta necessario: versione nativa IndexedDB. Scritture profilo confrontano `updatedAt` contro conflitti tra schede. Upgrade versionati additivi, nessun reset silenzioso; errori versione futura e timeout apertura bloccata comunicati. Store delle altre entità pianificati; contratto backup in [API](API.md).
+
+Versione corrente 2 (GATE 02): mantiene profiles e aggiunge foods/recipes (keyPath id), foodRevisions/recipeRevisions (keyPath composto [id, revision]). Revisioni come copie immutabili dei record validati; createdAt resta la creazione dell'entità, updatedAt indica la revisione. Testa e revisione atomiche, rollback verificato con collisione nello storico. Ricette con ingredienti/snapshot, resa e istruzioni, mai nutrienti totali persistiti. Riferimenti ai foodRevisions verificati in transazione; archiviazione reversibile incrementa revision. Nessuno store dei Gate futuri.

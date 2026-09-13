@@ -2,9 +2,17 @@
 
 ## Stato attuale
 
-Nessun backend o endpoint dati. Vite serve asset locali. Adapter implementa `initializeProfile(name?)` e `saveProfile(profile, expectedUpdatedAt, name?)`, asincroni con validazione e attesa commit. Nome database parametrico per test isolati. `errorMessage` traduce errori Zod, quota, versione e accesso; conflitti richiedono riapertura del form. Altri confini sotto sono pianificati finché introdotti nei rispettivi Gate.
+Nessun backend o endpoint dati. Vite serve asset locali. Adapter implementa `initializeProfile(name?)` e `saveProfile(profile, expectedUpdatedAt, name?)`, asincroni con validazione e attesa commit. Nome database parametrico per test isolati. `errorMessage` traduce errori Zod, quota, versione e accesso; conflitti richiedono annotare modifiche e ricaricare la pagina. Altri confini sotto sono pianificati finché introdotti nei rispettivi Gate.
 
 ## Confini dei moduli
+
+Implementati in GATE 02:
+
+- `readCatalog(name?)`: lettura e validazione alimenti/ricette, inclusi archiviati.
+- `saveFood(food, expectedRevision, name?)`, `saveRecipe(recipe, expectedRevision, name?)`: null per creazione, revisione attesa per modifica/archiviazione; ritornano il record dopo commit atomico con storico. Rifiutano conflitti, ingredienti orfani/falsificati e nuovi usi di alimenti archiviati/obsoleti; consentono mantenere gli ingredienti storici già presenti.
+- `foodSnapshot`, `recipeSnapshot`, `makeQuantity`, `calculate`, `sumNutrients`, `matchedExclusions`: funzioni pure in domain/nutrition. Nessuna rete o persistenza dei totali derivati.
+
+Errori Zod e DOMException tradotti senza payload personali. La UI aggiorna il catalogo dal record ritornato, senza confondere un refresh fallito con una scrittura fallita.
 
 | Modulo | Operazioni previste | Vincoli |
 | --- | --- | --- |

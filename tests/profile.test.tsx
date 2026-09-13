@@ -22,7 +22,7 @@ describe('Profilo', () => {
     expect(await initializeProfile(name)).toEqual(saved)
     await expect(saveProfile(first, first.updatedAt, name)).rejects.toThrow('altra scheda')
     const db = await openDatabase(name)
-    expect(db.version).toBe(1)
+    expect(db.version).toBe(2)
     expect(await db.count('profiles')).toBe(1)
     db.close()
   })

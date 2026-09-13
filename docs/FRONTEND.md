@@ -4,6 +4,8 @@
 
 Layout, sei destinazioni hash e impostazioni implementati; aree future con stato vuoto. Skip link, focus visibile, pagina corrente e impaginazione a 320 px. Occasioni aggiunte/rimosse (1–10), etichette esplicite e pulsante per spostarle in alto; numero derivato. Form con decimali italiani, errori associati ai campi, input conservato su errore e riscontro solo dopo commit. Review visiva e percorsi browser documentati nel Gate.
 
+GATE 02 aggiunge Alimenti/Ricette: ricerca, attivi/archiviati, creazione, modifica, archiviazione e ripristino. Schede con base/unità, nutrienti, fonti, esclusioni e calcolatore quantità. Fibre mancanti: Non disponibile. Form alimenti con provenienza obbligatoria e porzioni dichiarate; form ricette con snapshot ingredienti, quantità modificabili, resa e istruzioni. Fonti storiche conservate anche con alimento archiviato. Focus al titolo all'apertura form, al titolo pagina alla chiusura. Avvisi esclusioni descrittivi, senza impedire conservazione nel catalogo. Menù, diario, dashboard e backup futuri.
+
 ## Navigazione e schermate
 
 | Area | Contenuto previsto | Gate |

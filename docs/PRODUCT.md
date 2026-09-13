@@ -63,7 +63,7 @@ Non è confermato un obiettivo calorico o di macronutrienti. Non inventare sesso
 
 - Browser moderno su PC; layout responsive su smartphone. Persistenza separata per dispositivo, nessuna sincronizzazione implicita.
 - Gestione manuale di menù e catalogo nella prima release; generazione automatica e acquisto di database alimentari non sono decisi.
-- Fonti nutrizionali, conversioni porzioni e gestione della resa delle ricette saranno definite in GATE 02 con provenienza verificabile.
+- GATE 02 usa catalogo manuale senza dataset preinstallato, fonti obbligatorie, porzioni con conversioni dichiarate e resa ricette esplicita; scelte in ADR-005.
 - Accesso del telefono al servizio sul PC, eventuale modalità offline dopo chiusura del server e cifratura dei backup richiedono scelte esplicite prima della release.
 
 ## Non-obiettivi della prima release

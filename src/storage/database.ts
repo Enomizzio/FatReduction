@@ -1,15 +1,28 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
 import { defaultProfile, profileSchema, type Profile } from '../domain/profile'
+import type { Food, Recipe } from '../domain/nutrition'
 
 interface Database extends DBSchema {
   profiles: { key: string; value: Profile }
+  foods: { key: string; value: Food }
+  foodRevisions: { key: [string, number]; value: Food }
+  recipes: { key: string; value: Recipe }
+  recipeRevisions: { key: [string, number]; value: Recipe }
 }
 export const DATABASE_NAME = 'fatreduction'
-export const DATABASE_VERSION = 1
+export const DATABASE_VERSION = 2
 
 export async function openDatabase(name = DATABASE_NAME) {
   const opening = openDB<Database>(name, DATABASE_VERSION, {
-    upgrade(db) { if (!db.objectStoreNames.contains('profiles')) db.createObjectStore('profiles', { keyPath: 'id' }) },
+    upgrade(db, oldVersion) {
+      if (oldVersion < 1) db.createObjectStore('profiles', { keyPath: 'id' })
+      if (oldVersion < 2) {
+        db.createObjectStore('foods', { keyPath: 'id' })
+        db.createObjectStore('foodRevisions', { keyPath: ['id', 'revision'] })
+        db.createObjectStore('recipes', { keyPath: 'id' })
+        db.createObjectStore('recipeRevisions', { keyPath: ['id', 'revision'] })
+      }
+    },
     blocked() { /* Il timeout sotto comunica un errore recuperabile alla UI. */ },
     blocking() { void opening.then(db => db.close()) },
   })

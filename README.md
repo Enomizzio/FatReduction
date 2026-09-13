@@ -4,7 +4,7 @@ Applicazione web locale, in italiano, per consultare un menù, registrare consum
 
 ## Stato
 
-App locale con sei aree e profilo modificabile persistito in IndexedDB. Stato operativo in [PROJECT_STATUS](docs/PROJECT_STATUS.md). Menù, diario, dashboard e backup appartengono ai Gate successivi.
+GATE 01 e 02 completati: app locale con sei aree, profilo modificabile, catalogo alimenti/ricette e calcoli nutrizionali, persistiti in IndexedDB. Stato operativo in [PROJECT_STATUS](docs/PROJECT_STATUS.md). Menù, diario, dashboard e backup appartengono ai Gate successivi.
 
 ## Avvio locale
 

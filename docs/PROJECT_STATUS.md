@@ -2,14 +2,14 @@
 
 ## Current Gate
 
-Gate: [GATE 01 — Fondazione tecnica](gates/GATE_01_FOUNDATION.md)
-Status: COMPLETED
+Gate: [GATE 03 — Menù giornaliero e settimanale](gates/GATE_03_MENU.md)
+Status: NOT STARTED
 
 ## Completed Gates
 
 - [x] GATE 00 — Bootstrap del repository e documentazione
 - [x] GATE 01 — Fondazione tecnica, layout, navigazione e persistenza
-- [ ] GATE 02 — Alimenti, ricette e calcoli nutrizionali
+- [x] GATE 02 — Alimenti, ricette e calcoli nutrizionali
 - [ ] GATE 03 — Menù giornaliero e settimanale
 - [ ] GATE 04 — Diario, consumi reali e peso
 - [ ] GATE 05 — Dashboard, andamento e menù mensile
@@ -19,35 +19,36 @@ Status: COMPLETED
 
 ### Frontend
 
-React/TypeScript/Vite implementati. Sei aree italiane, impostazioni profilo con default confermati, esclusioni e occasioni ordinabili (1–10). Form con decimali italiani, validazione e conservazione input su errore. Aree future con stati vuoti; nessun piano o diario fittizio.
+React/TypeScript/Vite operativi. Sei aree italiane, profilo con default confermati modificabili, esclusioni e occasioni ordinabili (1–10). Alimenti/Ricette con ricerca, creazione/modifica, archiviazione/ripristino, nutrienti, fonti e calcolatore quantità. Ricette con ingredienti storici, quantità modificabili e resa dichiarata. Decimali italiani, errori accessibili e input conservato su errore. Menù, Oggi, Diario e Dashboard con stati vuoti; nessun piano o storico fittizio.
 
 ### Data persistence
 
-IndexedDB fatreduction v1, store profiles, wrapper idb e validazione Zod. Inizializzazione idempotente in transazione, scritture con rilevamento conflitti, errori quota/versione/accesso espliciti. Origine fissa http://127.0.0.1:5173 per dev e preview.
+IndexedDB fatreduction v2: profiles, foods, recipes, foodRevisions, recipeRevisions. Migrazione additiva da v1 verificata senza perdita del profilo. Wrapper idb e Zod; default inizializzati una volta, revisioni atomiche con controllo conflitti, fonti/snapshot storici conservati. Nessun totale ricetta duplicato. Origine fissa http://127.0.0.1:5173 per dev e preview; errori quota/versione/accesso recuperabili.
 
 ### Testing
 
-Runner Vitest/Testing Library, fake-indexeddb, Playwright Chromium e axe disponibili. Gate 01 PASS: 3 test Vitest, 2 E2E Chromium, lint, type-check, build, npm ci e review visiva; risultati nel Gate. Installazione riproducibile npm ci, script reali in TESTING.
+GATE 01 e 02 PASS. Ultima esecuzione: 12 test Vitest in 3 file, 4 scenari Playwright Chromium, lint, type-check, build e validatore documentale PASS. Migrazione, rollback, snapshot, esclusioni, quantità, resa, fibre null, input invalidi e quota verificati. Axe senza violazioni nelle viste esaminate; review visiva dell'agente su screenshot desktop/320 px. Installazione riproducibile npm ci verificata; comandi e limiti in TESTING, prove nei Gate.
 
 ### Infrastructure
 
-Node 24.15.0, npm 12.0.2, Git 2.55.0. Dipendenze esatte e lockfile; npm audit installazione senza vulnerabilità. Git locale su main, nessun remote. Identità Git assente; bootstrap già preparato nell'index prima di questa sessione.
+Node 24.15.0, npm 12.0.2, Git 2.55.0. Versioni esatte e package-lock.json; zero vulnerabilità segnalate dall'installazione npm del 2026-09-13. Avvio npm.cmd run dev, build npm.cmd run build, preview npm.cmd run preview. Git locale su main, nessun remote; checkpoint come Git tree in refs/checkpoints/gate-01 e refs/checkpoints/gate-02. Identità Git assente, nessun commit e nessuna identità inventata; file preparati nell'index.
 
 ## Known Issues
 
-- Nome/email Git non configurati: nessuna identità inventata.
-- Backup disponibile solo in GATE 06; versione intermedia, nessuna release completa.
+- Nome/email Git non configurati: possibile creare snapshot Git, commit rinviato.
+- Backup e import solo in GATE 06: versione intermedia, non release completa. Pulire i dati del sito elimina l'archivio.
 - Dati separati per browser, origine e dispositivo; LAN, PWA e cifratura backup non implementati.
-- Fonti alimentari e conversioni da definire in GATE 02; nessun target calorico personale.
+- Catalogo inizialmente vuoto, nessun database alimentare esterno incluso. Per prodotti composti l'utente deve dichiarare gli ingredienti per le esclusioni; nessuna verifica allergeni automatica.
+- Nessun target calorico o piano personale dedotto dal profilo. Audit accessibilità completo e altri browser restano alla release.
 
 ## Current Blockers
 
-Nessun blocco applicativo. Identità Git assente impedisce solo il commit; documentare il checkpoint senza fingere un commit.
+Nessun blocco applicativo. Identità Git assente impedisce soltanto i commit; i due checkpoint sono conservati come snapshot tree referenziati, consultabili con git ls-tree -r refs/checkpoints/gate-01 oppure gate-02.
 
 ## Next Objective
 
-Richiesta del 2026-09-13 autorizza GATE 01 e GATE 02 in sequenza. Gate 01 PASS; avviare Gate 02 già autorizzato: catalogo, ricette e calcoli. Gate 03 e successivi restano fuori perimetro.
+Richiesta del 2026-09-13 di proseguire con due Gate completata: GATE 01 e GATE 02. Su nuova richiesta esplicita iniziare esclusivamente GATE 03: piani giorno/settimana, revisioni immutabili, selezione per data, snapshot slot, cinque occasioni iniziali e filtro esclusioni sulle proposte. Riutilizzare calcoli, snapshot e repository esistenti; introdurre solo store necessari. Diario/consumi, grafici, menù mensile e backup restano ai Gate successivi.
 
 ## Relevant Documents
 
-[AGENTS](../AGENTS.md), [INDEX](INDEX.md), [GATE 01](gates/GATE_01_FOUNDATION.md), [GATE 02](gates/GATE_02_NUTRITION.md), [ARCHITECTURE](ARCHITECTURE.md), [DATA_MODEL](DATA_MODEL.md), [TESTING](TESTING.md), [SECURITY](SECURITY.md), [DECISIONS](DECISIONS.md).
+[AGENTS](../AGENTS.md), [INDEX](INDEX.md), [GATE 01](gates/GATE_01_FOUNDATION.md), [GATE 02](gates/GATE_02_NUTRITION.md), [GATE 03](gates/GATE_03_MENU.md), [ARCHITECTURE](ARCHITECTURE.md), [DATA_MODEL](DATA_MODEL.md), [TESTING](TESTING.md), [SECURITY](SECURITY.md), [DECISIONS](DECISIONS.md).

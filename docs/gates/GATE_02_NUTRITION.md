@@ -2,7 +2,7 @@
 
 ## Status
 
-NOT STARTED
+COMPLETED
 
 ## Objective
 
@@ -57,36 +57,45 @@ Prima dell'implementazione leggere:
 
 Il Gate è completo quando:
 
-- [ ] Alimenti e ricette creati/modificati/archiviati persistono e mostrano fonte, base, unità e stima.
-- [ ] Calcoli verificati su quantità frazionarie, porzioni convertite e ricetta con resa; conversione ignota blocca il calcolo.
-- [ ] Fibre mancanti e calorie indipendenti dai macro sono trattate come specificato.
-- [ ] Snapshot non cambiano quando cambia il catalogo; nessun totale derivato duplicato in storage.
-- [ ] Esclusioni rilevate anche negli ingredienti di ricetta, senza impedire future registrazioni reali.
-- [ ] Test pertinenti, lint, type-check, build, migrazioni e review UI passano; fonti e decisioni aggiornate.
+- [x] Alimenti e ricette creati/modificati/archiviati persistono e mostrano fonte, base, unità e stima.
+- [x] Calcoli verificati su quantità frazionarie, porzioni convertite e ricetta con resa; conversione ignota blocca il calcolo.
+- [x] Fibre mancanti e calorie indipendenti dai macro sono trattate come specificato.
+- [x] Snapshot non cambiano quando cambia il catalogo; nessun totale derivato duplicato in storage.
+- [x] Esclusioni rilevate anche negli ingredienti di ricetta, senza impedire future registrazioni reali.
+- [x] Test pertinenti, lint, type-check, build, migrazioni e review UI passano; fonti e decisioni aggiornate.
 
 ## Validation
 
-- [ ] Unit test — proporzioni, conversioni, resa, null, input invalidi ed esclusioni.
-- [ ] Integration test — catalogo, revisioni, archiviazione e migrazione senza perdita.
-- [ ] End-to-end test — se runner presente, catalogo/ricetta; altrimenti motivare verifica manuale.
-- [ ] Lint
-- [ ] Type-check
-- [ ] Build
-- [ ] Verifica manuale — fonti, unità, form ed errori.
-- [ ] Validatore documentale e prove registrate.
+- [x] Unit test — proporzioni, conversioni, resa, null, input invalidi ed esclusioni.
+- [x] Integration test — catalogo, revisioni, archiviazione e migrazione senza perdita.
+- [x] End-to-end test — se runner presente, catalogo/ricetta; altrimenti motivare verifica manuale.
+- [x] Lint
+- [x] Type-check
+- [x] Build
+- [x] Verifica manuale — fonti, unità, form ed errori.
+- [x] Validatore documentale e prove registrate.
 
 ## Gate Result
 
-`NOT EVALUATED`
+`PASS`
 
 ## Completion Information
 
-Started: non iniziato.
+Started: 2026-09-13, dopo PASS e checkpoint di GATE 01; richiesta dei due Gate già autorizzata.
 
-Completed: non completato.
+Completed: 2026-09-13.
 
-Git commit / reference: da registrare al completamento.
+Git commit / reference: refs/checkpoints/gate-02, snapshot Git tree. Nessun commit perché identità Git non configurata.
 
 ## Notes
 
-La scelta delle fonti e delle porzioni è ancora aperta; non scegliere un target calorico personale in questo Gate.
+Fonti manuali con provenienza obbligatoria e porzioni dichiarate, ADR-005. Nessun dataset esterno incluso e nessun target calorico personale scelto.
+
+### Prove della Gate Review — 2026-09-13
+
+- npm run typecheck, npm run lint, npm test (12 test in 3 file), npm run build: PASS. Stesso lockfile già verificato con npm ci in GATE 01, nessuna nuova dipendenza.
+- Test dominio: quantità frazionarie, porzioni, densità esplicita, unità incoerenti/conversione ignota, resa, fibre null, calorie indipendenti dai macro, overflow, fonti manuali e URL, esclusioni dirette e di ricetta, copie snapshot indipendenti.
+- Integrazione: v1 -> v2 conserva esattamente il profilo, versione futura rifiutata, revisioni e archiviazione persistenti, riferimenti orfani/snapshot falsificati rifiutati, rollback atomico su collisione nello storico. Ricette senza totali duplicati in storage.
+- npm run test:e2e: 4 scenari Chromium PASS, inclusa regressione GATE 01. Creazione alimento e ricetta, porzioni, modifica catalogo, conservazione fonti, modifica quantità di ingredienti già archiviati, archiviazione/ripristino, reload, quota e nuovo tentativo senza perdita input, input invalidi e istruzioni simili a script renderizzate inerti.
+- Axe senza violazioni nelle viste esaminate. Nessun overflow orizzontale a 320 px. Review visiva dell'agente su screenshot catalogo/food form a 320 px e recipe form desktop: unità, fonti, errori, resa, fibre sconosciute ed esclusioni leggibili. Interazioni via Playwright, non una verifica umana con screen reader; audit release futuro. Nessuna verifica obbligatoria N/A.
+- Validatore documentale PASS; modello v2, API, fonti, frontend, testing, sicurezza, decisioni e stato aggiornati. Prompt originale preservato. GATE 03 non avviato.

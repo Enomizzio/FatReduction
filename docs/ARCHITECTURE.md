@@ -6,6 +6,8 @@ App React 19.3.0, TypeScript 6.0.3, Vite 8.3.0, idb 8.0.3, Zod 4.6.4. Node 24.15
 
 Navigazione hash con link nativi, senza router aggiuntivo. Dev e preview su `http://127.0.0.1:5173`, loopback e strictPort. Build con asset locali e font di sistema. Compatibilità verificata su metadata npm e guide primarie Vite/Vitest il 2026-09-13; Node 24.15 soddisfa i requisiti. Scelte in ADR-004.
 
+GATE 02 implementa domain/nutrition (schema e calcoli), services/catalog (transazioni e revisioni), features/Catalog, FoodForm e RecipeForm; dettagli condivisi in components. IndexedDB v2 con cinque store e migrazione additiva da v1. Nessuna dipendenza aggiuntiva rispetto alla fondazione. Fonti manuali e conversioni in ADR-005.
+
 ## Componenti — ADR-001
 
 | Componente | Scelta iniziale | Responsabilità |

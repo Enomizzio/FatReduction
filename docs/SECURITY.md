@@ -34,6 +34,10 @@ Log tecnici minimi, senza nomi alimenti, peso, note, contenuto dei backup o inte
 
 L'app richiede una conferma esplicita che descriva l'ambito: archivio locale dell'origine corrente. Consentire di annullare e offrire export prima se disponibile. Eliminare gli store applicativi in modo coerente e verificare l'esito; aggiornare la UI solo al completamento. Non cancellare automaticamente i file di backup esterni e non promettere cancellazione sicura a livello disco. Il re-inserimento del profilo iniziale richiede una nuova inizializzazione chiaramente comunicata.
 
+## Verifiche GATE 02
+
+URL fonte limitati a http/https e 2.000 caratteri, nessun fetch automatico; note e istruzioni renderizzate come testo React. Browser test verifica istruzioni simili a script inerti e rifiuto URL javascript. Input e record catalogo validati, riferimenti snapshot controllati in transazione, conflitti espliciti e rollback provato. Archiviazione reversibile conserva tutte le revisioni; nessuna cancellazione fisica o import introdotti.
+
 ## Verifiche richieste prima della release
 
 Import ostile e rollback, assenza di rete obbligatoria e di segreti nei bundle, contenuti note inerti, errori storage recuperabili, conferme e annullamento, persistenza su origine stabile, gestione multi-tab e rischi export comprensibili. Lo stato reale di queste verifiche sarà registrato in GATE 06, senza considerarle già soddisfatte dalla documentazione.
