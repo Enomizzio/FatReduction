@@ -36,6 +36,8 @@ p { margin: 0 0 18px; }
 .meal-card { padding: 20px 0; border-top: 1px solid #dce2d7; min-width: 0; }
 .meal-card h3 { color: #315b43; }
 .menu-day { min-width: 0; }
+.history-list { padding: 0; list-style: none; display: grid; gap: 12px; }
+.history-list li { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .item-details { overflow-wrap: anywhere; }
 .item-details + .item-details { margin-top: 20px; }
 .field textarea { min-height: 80px; resize: vertical; }

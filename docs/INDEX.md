@@ -20,8 +20,8 @@ Questo indice è una mappa, non una copia delle specifiche. Iniziare sempre da A
 | [GATE 00](gates/GATE_00_BOOTSTRAP.md) | Bootstrap, inventario e review documentale | Verifica delle fondamenta del progetto |
 | [GATE 01](gates/GATE_01_FOUNDATION.md) | Tooling, layout, navigazione e persistenza | Fondazione implementata |
 | [GATE 02](gates/GATE_02_NUTRITION.md) | Alimenti, ricette e calcoli nutrizionali | Implementazione del dominio nutrizionale |
-| [GATE 03](gates/GATE_03_MENU.md) | Menù giornaliero/settimanale e cinque pasti | Pianificazione dei pasti |
-| [GATE 04](gates/GATE_04_DIARY.md) | Diario, consumi effettivi e peso | Registrazione delle giornate |
+| [GATE 03](gates/GATE_03_MENU.md) | Menù giorno/settimana, revisioni e selezione per data | Pianificazione implementata |
+| [GATE 04](gates/GATE_04_DIARY.md) | Diario, consumi indipendenti, peso e storico | Registrazione implementata |
 | [GATE 05](gates/GATE_05_DASHBOARD.md) | Progressi, grafici e menù mensile | Visualizzazione aggregata |
 | [GATE 06](gates/GATE_06_RELEASE.md) | Backup, import, hardening e release locale | Preparazione della prima release |
 | [src/README](../src/README.md) | Responsabilità dei moduli implementati | Prima di creare i moduli |

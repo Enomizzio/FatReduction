@@ -2,7 +2,7 @@
 
 ## Status
 
-NOT STARTED
+COMPLETED
 
 ## Objective
 
@@ -57,36 +57,44 @@ Prima dell'implementazione leggere:
 
 Il Gate è completo quando:
 
-- [ ] Una giornata registra consumi, quantità, peso opzionale, attività e note con validazione e persistenza.
-- [ ] Pianificato e consumato restano distinti; copia dal piano esplicita ed editabile.
-- [ ] Diario assente/aperto/completo e nutrienti mancanti sono riconoscibili senza zeri impliciti.
-- [ ] Dopo reload e modifiche al catalogo/menù si ricostruisce la stessa giornata storica.
-- [ ] Date future, quantità invalide, duplicati di peso e fallimenti storage sono gestiti senza perdita silenziosa.
-- [ ] Unitari, integrazione, e2e reali, lint, type-check, build e review manuale passano; documenti aggiornati.
+- [x] Una giornata registra consumi, quantità, peso opzionale, attività e note con validazione e persistenza.
+- [x] Pianificato e consumato restano distinti; copia dal piano esplicita ed editabile.
+- [x] Diario assente/aperto/completo e nutrienti mancanti sono riconoscibili senza zeri impliciti.
+- [x] Dopo reload e modifiche al catalogo/menù si ricostruisce la stessa giornata storica.
+- [x] Date future, quantità invalide, duplicati di peso e fallimenti storage sono gestiti senza perdita silenziosa.
+- [x] Unitari, integrazione, e2e reali, lint, type-check, build e review manuale passano; documenti aggiornati.
 
 ## Validation
 
-- [ ] Unit test — date, unicità peso, totali effettivi e dati incompleti.
-- [ ] Integration test — diario/revisioni/snapshot e transazioni.
-- [ ] End-to-end test — pianificato diverso da consumato, peso, reload e storico dopo modifiche.
-- [ ] Lint
-- [ ] Type-check
-- [ ] Build
-- [ ] Verifica manuale — Oggi, selezione date, campi opzionali, errori e tastiera.
-- [ ] Validatore documentale e prove registrate.
+- [x] Unit test — date, unicità peso, totali effettivi e dati incompleti.
+- [x] Integration test — diario/revisioni/snapshot e transazioni.
+- [x] End-to-end test — pianificato diverso da consumato, peso, reload e storico dopo modifiche.
+- [x] Lint
+- [x] Type-check
+- [x] Build
+- [x] Verifica manuale — Oggi, selezione date, campi opzionali, errori e tastiera.
+- [x] Validatore documentale e prove registrate.
 
 ## Gate Result
 
-`NOT EVALUATED`
+`PASS`
 
 ## Completion Information
 
-Started: non iniziato.
+Started: 2026-09-13, dopo GATE 03 PASS e pubblicazione del checkpoint c6959e0.
 
-Completed: non completato.
+Completed: 2026-09-13.
 
-Git commit / reference: da registrare al completamento.
+Git commit / reference: tag `gate-04-completed`, commit `feat: complete gate 04 diary, actual intake and weight`, su origin/main.
 
 ## Notes
 
 Fixture fittizie e browser test isolati. Backup completo arriva in GATE 06: rendere questo limite evidente prima di affidare dati reali alle versioni intermedie.
+
+### Prove di completamento — 2026-09-13
+
+24 test Vitest in 5 file PASS, 8 scenari Chromium PASS, lint/type-check/build PASS. Diario unico per data, peso unico aggiornabile, quantità indipendenti, campi opzionali, stato aperto/completo, null delle fibre, date future e snapshot verificati. Migrazione additiva v3/v4 conserva piani e selezioni, non crea diari/pesi. Copia esplicita idempotente e cambio previsto con occasioni occupate conservate verificati nel dominio e nella persistenza.
+
+E2E reali: pianificato 100 g e consumato 50 g, peso fittizio e campi opzionali persistono dopo reload, modifica/archiviazione catalogo e revisione menù. Cambio storico e rimozioni hanno conferma con annullamento verificato. Alimento escluso ammesso nei consumi. Errore quota sulla misurazione causa rollback di diario/consumi, mantiene input e consente nuovo tentativo. Conflitti tra scritture obsolete e snapshot falsificati rifiutati dai servizi.
+
+Review visiva dell'agente su diary-desktop.png, diary-consumed-320.png e diary-weight-320.png; nessun overflow a 320 px, axe senza violazioni nelle viste esaminate. Tastiera sul controllo del piano storico e selettore data nella suite. Note simili a script inerti. Bozze protette in navigazione; annullamento mantiene gli input. Validatore documentale e diff Git verificati alla chiusura. Nessuna verifica obbligatoria N/A. Non dichiarati audit release completo, screen reader umano o altri browser; restano a GATE 06. Nessun dato personale reale nei test, screenshot/trace non versionati.

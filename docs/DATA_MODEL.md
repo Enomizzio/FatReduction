@@ -2,7 +2,7 @@
 
 ## Stato e convenzioni
 
-Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GATE 02; piani, revisioni, pasti e selezioni in GATE 03. Entità GATE 04–06 ancora pianificate. Schema verificabile in domain/profile, domain/nutrition, domain/menu e storage/database.
+Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GATE 02; piani, revisioni, pasti e selezioni in GATE 03. Diario, consumi e peso implementati in GATE 04. Aggregazioni dashboard e backup dei Gate 05–06 ancora pianificati. Schemi verificabili in domain/profile, domain/nutrition, domain/menu, domain/diary e storage/database.
 
 - `Id`: UUID stringa, generato localmente. `LocalDate`: data gregoriana reale `YYYY-MM-DD`, senza conversione automatica a UTC. `Instant`: timestamp ISO 8601 UTC per audit tecnico, non per decidere il giorno alimentare.
 - `number`: finito, mai `NaN`/infinito. Quantità positive, nutrienti non negativi. Precisione mantenuta nei calcoli, arrotondamento solo in presentazione.
@@ -24,7 +24,7 @@ Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GA
 
 Per una voce: nutrienti = nutrienti snapshot × quantità convertita / quantità base. La quantità memorizza il fattore usato, così una successiva conversione del catalogo non modifica lo storico.
 
-In GATE 02 catalogId/catalogRevision sempre presenti per snapshot da catalogo; caso manuale senza catalogo futuro. Snapshot ricetta aggiunge `ingredientSnapshots?: {snapshot: FoodSnapshot, quantity: Quantity}[]`, copie senza ricette annidate per conservare tutte le fonti/conversioni. Calcoli rifiutano overflow non finiti. URL massimo 2.000 caratteri; chiavi ingredienti/esclusioni massimo 100, porzioni massimo 20 con etichette uniche, ingredienti ricetta massimo 100 (limiti tecnici). Dati manuali richiedono isEstimate=true; UI marca stimate anche trascrizioni etichette/database.
+Nei Gate 02–04 catalogId/catalogRevision sono sempre presenti; dati manuali passano dal catalogo con fonte manuale stimata. Snapshot senza catalogo restano una possibile estensione futura. Snapshot ricetta aggiunge `ingredientSnapshots?: {snapshot: FoodSnapshot, quantity: Quantity}[]`, copie senza ricette annidate per conservare tutte le fonti/conversioni. Calcoli rifiutano overflow non finiti. URL massimo 2.000 caratteri; chiavi ingredienti/esclusioni massimo 100, porzioni massimo 20 con etichette uniche, ingredienti ricetta massimo 100 (limiti tecnici). Dati manuali richiedono isEstimate=true; UI marca stimate anche trascrizioni etichette/database.
 
 ## UserProfile — GATE 01
 
@@ -84,11 +84,13 @@ Unico `(profileId, date)`; diario assente, aperto e completo sono distinti. `pla
 
 ## ConsumedEntry — GATE 04
 
-`id: Id`, `diaryId: Id`, `slot: MealSlot`, `catalogId: Id/null`, `kind: food/recipe/manual`, `snapshot: NutritionSnapshot`, `quantity: Quantity`, `plannedItemId: Id/null`, `consumedAt: Instant/null`, `notes: string/null`, `createdAt/updatedAt: Instant`.
+`id: Id`, `diaryId: Id`, `slot: MealSlot`, `catalogId: Id`, `kind: food/recipe`, `snapshot: NutritionSnapshot`, `quantity: Quantity`, `plannedItemId: Id/null`, `consumedAt: Instant/null`, `notes: string/null`, `createdAt/updatedAt: Instant`.
 
-Molte voci per diario; slot presente nella configurazione storica del diario. Riferimento al pianificato opzionale e valido solo nella revisione associata; copiare dal piano crea una voce indipendente ed editabile. Una voce manuale richiede base, nutrienti e fonte manuale esplicita. I consumi non sono limitati dal piano o dalle esclusioni. L'ora non sposta automaticamente la LocalDate scelta dall'utente.
+Molte voci per diario; slot presente nella configurazione storica del diario. Riferimento al pianificato opzionale e valido solo nella revisione associata; copiare dal piano crea una voce indipendente ed editabile. Per dati manuali si crea prima un alimento nel catalogo con base, nutrienti e fonte manuale esplicita; inserimento libero senza catalogo non implementato. I consumi non sono limitati dal piano o dalle esclusioni. L'ora non sposta automaticamente la LocalDate scelta dall'utente.
 
-## Dati derivati — GATE 02/05
+Implementazione GATE 04: massimo 1.000 consumi e 100 attività per diario. Occasioni storiche fino a 100 per conservare quelle occupate attraverso cambi espliciti di piano (configurazione del profilo sempre 1–10). Attività con descrizione 1–200 caratteri. consumedAt rimane null nella UI; la data scelta è l'unica data alimentare. Copia dal piano idempotente rispetto a plannedItemId già presenti; copie indipendenti con UUID propri, alternative escluse. Il cambio di piano elimina i collegamenti plannedItemId precedenti, preservando quantità/fonti e slot con consumi. Nessun peso duplicato nel diario.
+
+## Dati derivati — GATE 02–05
 
 Riepiloghi di pasto/giorno/settimana, calorie e macro pianificati/consumati, andamento del peso e variazione sono calcolati sulle entità canoniche. Nessuna duplicazione persistita; eventuali cache richiedono ADR, invalidazione e versione dell'algoritmo.
 
@@ -96,8 +98,10 @@ Le fibre aggregate sono `null` se almeno una voce ha fibre sconosciute; eventual
 
 ## Persistenza e migrazioni
 
-Database `fatreduction`, versione 1 (GATE 01): store `profiles`, keyPath `id`. Unico profilo inizializzato in transazione readwrite, validato anche in lettura; numero pasti derivato. `dailyTargets` resta null. Nessuno store meta necessario: versione nativa IndexedDB. Scritture profilo confrontano `updatedAt` contro conflitti tra schede. Upgrade versionati additivi, nessun reset silenzioso; errori versione futura e timeout apertura bloccata comunicati. Store delle altre entità pianificati; contratto backup in [API](API.md).
+Database `fatreduction`, versione 1 (GATE 01): store `profiles`, keyPath `id`. Unico profilo inizializzato in transazione readwrite, validato anche in lettura; numero pasti derivato. `dailyTargets` resta null. Nessuno store meta necessario: versione nativa IndexedDB. Scritture profilo confrontano `updatedAt` contro conflitti tra schede. Upgrade versionati additivi, nessun reset silenzioso; errori versione futura e timeout apertura bloccata comunicati. Store successivi descritti sotto; contratto backup in [API](API.md).
 
 Versione 2 (GATE 02): mantiene profiles e aggiunge foods/recipes (keyPath id), foodRevisions/recipeRevisions (keyPath composto [id, revision]). Revisioni come copie immutabili dei record validati; createdAt resta la creazione dell'entità, updatedAt indica la revisione. Testa e revisione atomiche, rollback verificato con collisione nello storico. Ricette con ingredienti/snapshot, resa e istruzioni, mai nutrienti totali persistiti. Riferimenti ai foodRevisions verificati in transazione; archiviazione reversibile incrementa revision.
 
-Versione corrente 3 (GATE 03): aggiunge menuPlans, menuPlanRevisions, plannedMeals e dayPlanSelections, tutti con keyPath id. Indici unici rispettivamente sulle revisioni [menuPlanId, revisionNumber], sui pasti [revisionId, date, slot], sulle selezioni [profileId, date]. Testa/revisione/pasti salvati atomicamente, revisione attesa e updatedAt della selezione contro conflitti. Nessuno store dei Gate futuri.
+Versione 3 (GATE 03): aggiunge menuPlans, menuPlanRevisions, plannedMeals e dayPlanSelections, tutti con keyPath id. Indici unici rispettivamente sulle revisioni [menuPlanId, revisionNumber], sui pasti [revisionId, date, slot], sulle selezioni [profileId, date]. Testa/revisione/pasti salvati atomicamente, revisione attesa e updatedAt della selezione contro conflitti.
+
+Versione corrente 4 (GATE 04): aggiunge dailyDiaries e bodyMeasurements con keyPath id e indici unici [profileId, date], consumedEntries con keyPath id e indice diary su diaryId. Migrazione v3/v4 additiva senza creare diari o misure fittizie. Salvataggio atomico di diario, consumi e peso; confronto separato updatedAt di diario e peso, controllo identità/referenze, conferme su rimozioni e cambio previsto. Fallimento del peso annulla anche diario e consumi. Nessuno store dei Gate futuri.

@@ -2,9 +2,9 @@
 
 ## Stato e dati trattati
 
-Profilo persistito in IndexedDB, inizializzato una volta dai valori autorizzati nel progetto. Prompt e specifiche contengono età, altezza e baseline: da considerare prima di pubblicare il repository. Repository locale senza remote. Test in browser isolati e fixture fittizie, risultati ignorati da Git.
+Profilo persistito in IndexedDB, inizializzato una volta dai valori autorizzati nel progetto. Prompt e specifiche contengono età, altezza e baseline: da considerare prima di pubblicare il repository. Repository pubblicato su GitHub su richiesta esplicita; dati runtime conservati solo nel browser. Test in browser isolati e fixture fittizie, risultati ignorati da Git.
 
-L'app conserverà dati personali su peso, alimentazione e note potenzialmente sanitarie. Minimizzare raccolta e diffusione; nessun analytics, account o invio a terzi obbligatorio. Non classificare l'app come strumento medico né promettere effetti clinici.
+L'app conserva dati personali su peso, alimentazione e note potenzialmente sanitarie. Minimizzare raccolta e diffusione; nessun analytics, account o invio a terzi obbligatorio. Non classificare l'app come strumento medico né promettere effetti clinici.
 
 ## Minacce e limiti della prima release
 
@@ -41,6 +41,12 @@ URL fonte limitati a http/https e 2.000 caratteri, nessun fetch automatico; note
 ## Verifiche GATE 03
 
 Piani e scelte giornaliere validati in transazione, snapshot confrontati con revisioni reali del catalogo, conflitti e rollback verificati. Nessun consumo inventato né dato personale di test. Note renderizzate come testo; bozze conservate dopo quota esaurita, scarto esplicitamente confermato. Test e screenshot usano contesti browser isolati. Pubblicazione del codice e documentazione su GitHub richiesta dall'utente; nessun backup, log o dato del suo browser incluso.
+
+## Verifiche GATE 04
+
+Diario, consumi e peso validati prima del commit e salvati atomicamente. Indici unici impediscono due diari o due misurazioni per profilo/data. Confronto updatedAt e controllo proprietario degli UUID contro conflitti/sovrascritture di altre giornate. Snapshot autentici verificati anche per consumi esclusi dalle proposte. Rimozioni e cambio del riferimento storico richiedono conferma nell'app, con annullamento verificato nel browser. Note simili a script restano testo inerte. Date future rifiutate sia nella UI sia nel dominio.
+
+Quota simulata sull'ultima scrittura della misurazione: rollback di diario e consumi già scritti, input conservato e nuovo tentativo riuscito. Navigazione con bozza non salvata richiede conferma; annullamento mantiene input. Tutte le misure, fonti e giornate nei test sono fittizie; screenshot e trace esclusi da Git. Backup ancora assente, limite esposto nel footer.
 
 ## Verifiche richieste prima della release
 

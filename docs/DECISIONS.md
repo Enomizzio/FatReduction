@@ -1,5 +1,17 @@
 # Decisioni importanti
 
+## ADR-007 — Diario atomico, previsto congelato e peso separato
+
+Status: Accepted — 2026-09-13, GATE 04.
+
+IndexedDB v4 aggiunge tre store: dailyDiaries, consumedEntries, bodyMeasurements. Diario e peso unici per profilo/data tramite indici; tutte le modifiche di una giornata salvate insieme, con confronto separato delle versioni e rollback completo. Peso mai copiato dalla baseline e mai duplicato nel diario. Date future rifiutate. Totali derivati: aperto senza voci è sconosciuto, completo senza voci è zero; fibre mancanti restano null.
+
+Aprire il diario conserva la revisione selezionata per data senza creare consumi. Copia esplicita genera UUID indipendenti, evita ricopie degli stessi plannedItemId ed esclude le alternative. Cambiare il menù o il catalogo non riscrive diario e snapshot. Cambio previsto confermato conserva voci/fonti e occasioni ancora occupate, scollegando i vecchi plannedItemId. Limite tecnico di 100 slot storici per consentire cambi di configurazione senza perdita, con profilo ancora limitato a 10.
+
+Consumi ammessi anche per ingredienti esclusi nelle proposte. Valori manuali inseriti tramite catalogo con fonte dichiarata; un secondo editor di snapshot senza catalogo non è necessario per i criteri del Gate. ConsumedEntry usa food/recipe e riferimenti al catalogo sempre presenti; consumedAt opzionale non esposto dalla UI. Attività descrittive senza calcolo delle calorie bruciate.
+
+Rimozioni di consumi/peso e cambio storico richiedono conferma; le bozze sono protette anche nei cambi area/data e nel reload. Il peso viene salvato con il diario per rendere verificabile un singolo esito, mantenendo entità separate. Alternative escluse: aggiornare automaticamente il previsto, inferire consumi dal piano o salvare riepiloghi duplicati. Nessun grafico, vista mensile o backup anticipato.
+
 ## ADR-006 — Piani da uno/sette giorni, selezioni esplicite e revisioni atomiche
 
 Status: Accepted — 2026-09-13, GATE 03.

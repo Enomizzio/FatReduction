@@ -85,7 +85,7 @@ Started: 2026-09-13, richiesta esplicita di proseguire con GATE 03 e 04; success
 
 Completed: 2026-09-13.
 
-Git commit / reference: checkpoint con messaggio `feat: complete gate 03 menu planning and immutable revisions`; pubblicazione GitHub autorizzata.
+Git commit / reference: `c6959e0` — `feat: complete gate 03 menu planning and immutable revisions`, pubblicato su origin/main il 2026-09-13.
 
 ## Notes
 

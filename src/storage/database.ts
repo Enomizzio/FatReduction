@@ -2,6 +2,7 @@ import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
 import { defaultProfile, profileSchema, type Profile } from '../domain/profile'
 import type { Food, Recipe } from '../domain/nutrition'
 import type { MenuPlan, MenuRevision, PlannedMeal, DayPlanSelection } from '../domain/menu'
+import type { BodyMeasurement, ConsumedEntry, DailyDiary } from '../domain/diary'
 
 interface Database extends DBSchema {
   profiles: { key: string; value: Profile }
@@ -13,9 +14,12 @@ interface Database extends DBSchema {
   menuPlanRevisions: { key: string; value: MenuRevision; indexes: { planRevision: [string, number] } }
   plannedMeals: { key: string; value: PlannedMeal; indexes: { revisionDateSlot: [string, string, string] } }
   dayPlanSelections: { key: string; value: DayPlanSelection; indexes: { profileDate: [string, string] } }
+  dailyDiaries: { key: string; value: DailyDiary; indexes: { profileDate: [string, string] } }
+  consumedEntries: { key: string; value: ConsumedEntry; indexes: { diary: string } }
+  bodyMeasurements: { key: string; value: BodyMeasurement; indexes: { profileDate: [string, string] } }
 }
 export const DATABASE_NAME = 'fatreduction'
-export const DATABASE_VERSION = 3
+export const DATABASE_VERSION = 4
 
 export async function openDatabase(name = DATABASE_NAME) {
   const opening = openDB<Database>(name, DATABASE_VERSION, {
@@ -32,6 +36,11 @@ export async function openDatabase(name = DATABASE_NAME) {
         db.createObjectStore('menuPlanRevisions', { keyPath: 'id' }).createIndex('planRevision', ['menuPlanId', 'revisionNumber'], { unique: true })
         db.createObjectStore('plannedMeals', { keyPath: 'id' }).createIndex('revisionDateSlot', ['revisionId', 'date', 'slot'], { unique: true })
         db.createObjectStore('dayPlanSelections', { keyPath: 'id' }).createIndex('profileDate', ['profileId', 'date'], { unique: true })
+      }
+      if (oldVersion < 4) {
+        db.createObjectStore('dailyDiaries', { keyPath: 'id' }).createIndex('profileDate', ['profileId', 'date'], { unique: true })
+        db.createObjectStore('consumedEntries', { keyPath: 'id' }).createIndex('diary', 'diaryId')
+        db.createObjectStore('bodyMeasurements', { keyPath: 'id' }).createIndex('profileDate', ['profileId', 'date'], { unique: true })
       }
     },
     blocked() { /* Il timeout sotto comunica un errore recuperabile alla UI. */ },

@@ -34,6 +34,13 @@ Implementati in GATE 03 in services/menu:
 - `selectDayPlan(profileId, date, revisionId, expectedUpdatedAt, name?)`: scelta esplicita e unica per data con controllo conflitti; non aggiorna altri dati.
 - `newMenu`, `reviseMenu`, `applySlots`, `chooseSubstitution`, `menuTotal`, `todayLocal`, `addDays`: dominio puro e date gregoriane senza conversione del giorno locale in UTC.
 
+Implementati in GATE 04 in services/diary:
+
+- `readDiary(profileId, date, name?)`: bundle validato o null per diario assente; previsto storico controllato.
+- `readDiaryHistory(profileId, name?)`: diari ordinati per data decrescente e misurazioni separate, nessun riepilogo duplicato.
+- `saveDiary(bundle, options, name?)`: commit atomico di diario/consumi/peso. options contiene expectedUpdatedAt ed expectedWeightUpdatedAt, più confirmPlanChange/confirmEntryRemoval/confirmMeasurementRemoval per modifiche consapevoli. Conflitti, snapshot falsi, date future, identità già usate e riferimenti invalidi causano rollback. Ritorna solo dati effettivamente salvati.
+- `newDiary`, `copyPlanned`, `consumedFromItem`, `changeDiaryPlan`, `consumedTotal`, `validateRecordedDate`: dominio puro. Copia dal piano idempotente; aperto senza voci restituisce totale null, completo senza voci totale zero.
+
 ## Backup JSON — proposta per GATE 06
 
 Formato completo locale, file UTF-8 suggerito `fatreduction-backup-YYYY-MM-DD.json`. Nessuna cifratura o import già implementati. Envelope previsto:
@@ -48,7 +55,9 @@ Formato completo locale, file UTF-8 suggerito `fatreduction-backup-YYYY-MM-DD.js
     "profiles": [],
     "bodyMeasurements": [],
     "foods": [],
+    "foodRevisions": [],
     "recipes": [],
+    "recipeRevisions": [],
     "menuPlans": [],
     "menuPlanRevisions": [],
     "plannedMeals": [],

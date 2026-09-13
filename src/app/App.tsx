@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import type { Profile } from '../domain/profile'
 import { initializeProfile } from '../storage/database'
 import { errorMessage } from '../services/errors'
 import { ProfileForm } from '../features/ProfileForm'
 import { Catalog } from '../features/Catalog'
-import { Menu, PlannedToday } from '../features/Menu'
+import { Menu } from '../features/Menu'
+import { Diary } from '../features/Diary'
 import { todayLocal } from '../domain/menu'
 
 const areas = [ ['dashboard', 'Dashboard', '◫'], ['oggi', 'Oggi', '☀'], ['menu', 'Menù', '▤'], ['diario', 'Diario', '▥'], ['catalogo', 'Alimenti / Ricette', '◇'], ['impostazioni', 'Impostazioni', '⚙'] ]
@@ -14,10 +15,22 @@ const descriptions: Record<string, string> = { dashboard: 'Una visione d’insie
 export function App() {
   const [area, setArea] = useState(currentArea)
   const [date, setDate] = useState(todayLocal)
+  const unsaved = useRef(false), previousHash = useRef(location.hash)
+  const onDirty = useCallback((value: boolean) => { unsaved.current = value }, [])
   const [profile, setProfile] = useState<Profile>()
   const [error, setError] = useState('')
   const [retry, setRetry] = useState(0)
-  useEffect(() => { const change = () => { if (location.hash === '#main') return; setArea(currentArea()); document.getElementById('page-title')?.focus() }; window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change) }, [])
+  useEffect(() => {
+    const change = () => {
+      if (location.hash === '#main') return
+      if (unsaved.current && !window.confirm('Cambiare area e scartare le modifiche non salvate? I dati già salvati rimangono conservati.')) { history.replaceState(null, '', previousHash.current || location.pathname); return }
+      unsaved.current = false; previousHash.current = location.hash
+      setArea(currentArea()); document.getElementById('page-title')?.focus()
+    }
+    const leave = (event: BeforeUnloadEvent) => { if (unsaved.current) event.preventDefault() }
+    window.addEventListener('hashchange', change); window.addEventListener('beforeunload', leave)
+    return () => { window.removeEventListener('hashchange', change); window.removeEventListener('beforeunload', leave) }
+  }, [])
   useEffect(() => { let active = true; initializeProfile().then(p => { if (active) { setProfile(p); setError('') } }).catch(e => { if (active) setError(errorMessage(e)) }); return () => { active = false } }, [retry])
   return <><a className="skip-link" href="#main">Vai al contenuto</a><div className="app-shell">
     <aside className="sidebar"><a className="brand" href="#impostazioni"><span className="brand-mark">f.</span><span>FATREDUCTION<small>Un giorno alla volta</small></span></a>
@@ -25,7 +38,7 @@ export function App() {
       <div className="local-note"><span className="status-dot" /> Il tuo spazio locale<p>I dati restano in questo browser.<br />Nessun account necessario.</p></div>
     </aside>
     <main id="main" tabIndex={-1}><header className="page-header"><div><p className="eyebrow">IL TUO PERCORSO, CON CONSAPEVOLEZZA</p><h1 id="page-title" tabIndex={-1}>{areas.find(([key]) => key === area)?.[1]}</h1><p>{descriptions[area]}</p></div><span className="badge">Solo sul tuo dispositivo</span></header>
-      {error ? <div role="alert" className="notice error"><p>{error}</p><button onClick={() => setRetry(retry + 1)}>Riprova apertura archivio</button></div> : !profile ? <p role="status">Apertura del tuo spazio…</p> : area === 'impostazioni' ? <ProfileForm key={profile.id} profile={profile} onSaved={setProfile} /> : area === 'catalogo' ? <Catalog exclusions={profile.excludedFoodKeys} /> : area === 'menu' ? <Menu profile={profile} date={date} onDate={setDate} /> : area === 'oggi' ? <PlannedToday profile={profile} date={date} onDate={setDate} /> : <section className="panel empty"><span className="empty-symbol" aria-hidden="true">◌</span><h2>Questo spazio è ancora da compilare</h2><p>Questa funzione sarà disponibile in una prossima tappa del progetto.</p><a className="button" href="#impostazioni">Vai al tuo profilo</a></section>}
+      {error ? <div role="alert" className="notice error"><p>{error}</p><button onClick={() => setRetry(retry + 1)}>Riprova apertura archivio</button></div> : !profile ? <p role="status">Apertura del tuo spazio…</p> : area === 'impostazioni' ? <ProfileForm key={profile.id} profile={profile} onSaved={setProfile} /> : area === 'catalogo' ? <Catalog exclusions={profile.excludedFoodKeys} /> : area === 'menu' ? <Menu profile={profile} date={date} onDate={setDate} onDirty={onDirty} /> : area === 'oggi' || area === 'diario' ? <Diary key={area} profile={profile} date={date} onDate={setDate} showHistory={area === 'diario'} onDirty={onDirty} /> : <section className="panel empty"><span className="empty-symbol" aria-hidden="true">◌</span><h2>Questo spazio è ancora da compilare</h2><p>Questa funzione sarà disponibile in una prossima tappa del progetto.</p><a className="button" href="#impostazioni">Vai al tuo profilo</a></section>}
       <footer>FATREDUCTION · Uno strumento per organizzarti, al tuo ritmo.<p>Versione in sviluppo. Backup non ancora disponibile: la pulizia dei dati del browser elimina l’archivio locale.</p></footer>
     </main></div></>
 }

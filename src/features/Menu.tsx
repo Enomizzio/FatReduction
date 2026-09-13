@@ -20,12 +20,6 @@ export function DayPlanView({ data, revisionId, date }: { data: MenuData; revisi
   return <section className="panel stack"><h2>Pianificato · {date}</h2>{!revision || !plan ? <p>Nessun piano selezionato per questa data. Sceglilo nell’area <a href="#menu">Menù</a>.</p> : <><p>{plan.title} · Revisione {revision.revisionNumber}</p>{revision.mealSlotsSnapshot.map(s => { const meal = meals.find(m => m.slot === s.key); return meal ? <MealView key={s.key} meal={meal} label={s.label} /> : null })}<p>Stime delle voci pianificate{meals.some(m => !m.items.length) ? ' · giornata da completare' : ''}</p>{meals.some(m => m.items.length) ? <NutrientsView nutrients={menuTotal(meals)} /> : <p>Nessuna stima disponibile.</p>}</>}</section>
 }
 
-export function PlannedToday({ profile, date, onDate }: { profile: Profile; date: string; onDate: (date: string) => void }) {
-  const [data, setData] = useState<MenuData>(), [error, setError] = useState(''), [retry, setRetry] = useState(0)
-  useEffect(() => { let active = true; readMenus(profile.id).then(d => { if (active) { setData(d); setError('') } }).catch(e => { if (active) setError(errorMessage(e)) }); return () => { active = false } }, [profile.id, retry])
-  return <div className="stack"><DateNavigation date={date} onDate={onDate} />{error ? <div role="alert" className="notice error">{error}<button onClick={() => setRetry(retry + 1)}>Riprova</button></div> : data ? <DayPlanView data={data} revisionId={data.selections.find(s => s.date === date)?.revisionId ?? null} date={date} /> : <p role="status">Apertura menù…</p>}</div>
-}
-
 export function DateNavigation({ date, onDate }: { date: string; onDate: (date: string) => void }) {
   return <div className="actions"><Field label="Data selezionata" type="date" value={date} onChange={e => { if (/^\d{4}-\d{2}-\d{2}$/.test(e.target.value)) onDate(e.target.value) }} /><button type="button" onClick={() => onDate(todayLocal())}>Torna a oggi</button></div>
 }
@@ -40,10 +34,11 @@ function MealEditor({ meal, label, catalog, profile, onChange }: { meal: Planned
   </section>
 }
 
-export function Menu({ profile, date, onDate }: { profile: Profile; date: string; onDate: (date: string) => void }) {
+export function Menu({ profile, date, onDate, onDirty }: { profile: Profile; date: string; onDate: (date: string) => void; onDirty: (dirty: boolean) => void }) {
   const [data, setData] = useState<MenuData>(), [catalog, setCatalog] = useState<{ foods: Food[]; recipes: Recipe[] }>(), [error, setError] = useState(''), [message, setMessage] = useState(''), [retry, setRetry] = useState(0)
   const [draft, setDraft] = useState<MenuBundle>(), [expected, setExpected] = useState<string | null>(null), [viewId, setViewId] = useState(''), [week, setWeek] = useState(false), [busy, setBusy] = useState(false)
   const [title, setTitle] = useState(''), [start, setStart] = useState(date), [days, setDays] = useState('1')
+  useEffect(() => { onDirty(!!draft); return () => onDirty(false) }, [draft, onDirty])
   useEffect(() => { let active = true; Promise.all([readMenus(profile.id), readCatalog()]).then(([d, c]) => { if (active) { setData(d); setCatalog(c); setError('') } }).catch(e => { if (active) setError(errorMessage(e)) }); return () => { active = false } }, [profile.id, retry])
   const revision = data?.revisions.find(r => r.id === viewId), plan = data?.plans.find(p => p.id === revision?.menuPlanId)
   const viewed = plan && revision && data ? { plan, revision, meals: data.meals.filter(m => m.revisionId === revision.id) } : undefined

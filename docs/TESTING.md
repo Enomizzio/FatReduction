@@ -36,6 +36,14 @@ Nessun dato reale inserito nei test: default di configurazione autorizzati e fix
 
 Axe senza violazioni nelle viste esaminate; tastiera automatizzata e review visiva dell'agente su menu-today-desktop.png e menu-form-320.png. Screenshot in test-results ignorati da Git. Validatore documentale PASS registrato nella review. Nessun criterio obbligatorio rinviato al GATE 04; audit completo release ancora futuro.
 
+## Evidenze GATE 04 — 2026-09-13
+
+24 test Vitest in 5 file, suite completa di 8 scenari Chromium, lint, type-check (anche nella build) e build PASS. Migrazione v3/v4 conserva profilo/piani/selezioni senza creare diari o peso. Copia esplicita e idempotente, quantità indipendenti, stato aperto/completo, null delle fibre, date future, indici unici peso/diario, conflitti e rollback transazionale verificati. Cambio previsto confermato conserva slot con consumi, fonti e quantità; storico invariato dopo revisione del piano e modifica/archiviazione del catalogo.
+
+Browser: consumi reali di alimenti esclusi accettati, peso aggiornato e reload, attività/campi opzionali, note simili a script inerti, quota sulla misurazione annulla le precedenti scritture, input conservato, conferme accettate/annullate e annullamento della navigazione con bozza. Axe senza violazioni nelle viste esaminate; review visiva dell'agente su diary-desktop.png, diary-consumed-320.png e diary-weight-320.png. Tastiera verificata sul controllo del piano storico e sul selettore data nella suite; non è una prova con screen reader umano. Nessun criterio obbligatorio N/A, audit release completo ancora futuro.
+
+Validatore documentale eseguito alla chiusura insieme al controllo diff Git; nessun backup o dato personale reale nei test/repository. Non è stata ripetuta npm ci: nessuna dipendenza o lockfile modificati rispetto all'installazione già verificata.
+
 ## Strategia
 
 - Unitari: conversioni quantità, aggregazione, null delle fibre, date locali, validazioni, esclusioni e revisione. In GATE 01 coprire soltanto invarianti del profilo e inizializzazione senza sovrascrittura.

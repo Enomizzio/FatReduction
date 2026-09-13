@@ -1,15 +1,6 @@
-import { expect, test, type Page } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
-
-export async function createFood(page: Page, name = 'Alimento fittizio') {
-  await page.goto('/#catalogo')
-  await page.getByRole('button', { name: 'Nuovo alimento' }).click()
-  await page.getByLabel('Nome alimento', { exact: true }).fill(name)
-  for (const [label, value] of [['Energia (kcal)', '123'], ['Proteine (g)', '10'], ['Carboidrati (g)', '20'], ['Grassi (g)', '3']]) await page.getByLabel(label, { exact: true }).fill(value)
-  await page.getByLabel('Riferimento della fonte', { exact: true }).fill('Fixture fittizia per test')
-  await page.getByRole('button', { name: 'Salva alimento' }).click()
-  await expect(page.getByRole('status')).toContainText('Alimento salvato')
-}
+import { createFood } from './helpers'
 test('menù settimana: esclusioni, alternativa, revisione, scelta per data e reload a 320 px', async ({ page }) => {
   await createFood(page, 'Tartufo fittizio')
   await createFood(page)

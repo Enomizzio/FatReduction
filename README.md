@@ -4,7 +4,7 @@ Applicazione web locale, in italiano, per consultare un menù, registrare consum
 
 ## Stato
 
-GATE 01–03 completati: app locale con profilo, catalogo alimenti/ricette, calcoli e menù giorno/settimana con revisioni storiche, persistiti in IndexedDB. Oggi mostra il piano scelto per data. Stato operativo in [PROJECT_STATUS](docs/PROJECT_STATUS.md). Diario, dashboard e backup appartengono ai Gate successivi.
+GATE 01–04 completati: app locale con profilo, catalogo alimenti/ricette, menù giorno/settimana e diario con consumi, peso e campi opzionali, persistiti in IndexedDB. Pianificato e consumato restano distinti e ricostruibili nello storico. Stato operativo in [PROJECT_STATUS](docs/PROJECT_STATUS.md). Dashboard, vista mensile e backup appartengono ai Gate successivi.
 
 ## Avvio locale
 
@@ -52,4 +52,4 @@ ExecutionPolicy vale solo per questo processo. Comandi applicativi e verifiche i
 
 ## Dati e utilizzo locale
 
-La persistenza prevista risiede nel browser e dipende da origine, profilo e dispositivo: cancellare i dati del sito può perdere lo storico. Un layout responsive permette l'uso su smartphone, ma non sincronizza i dati del PC. Backup e importazione saranno implementati in GATE 06; rischi e vincoli sono in [SECURITY](docs/SECURITY.md).
+La persistenza risiede nel browser e dipende da origine, profilo e dispositivo: cancellare i dati del sito può perdere lo storico. Un layout responsive permette l'uso su smartphone, ma non sincronizza i dati del PC. Backup e importazione saranno implementati in GATE 06; rischi e vincoli sono in [SECURITY](docs/SECURITY.md).

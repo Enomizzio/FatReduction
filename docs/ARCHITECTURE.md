@@ -2,13 +2,15 @@
 
 ## Architettura attuale
 
-App React 19.3.0, TypeScript 6.0.3, Vite 8.3.0, idb 8.0.3, Zod 4.6.4. Node 24.15.0/npm 12.0.2 verificati. Vitest 5.0.0, Playwright 1.63.0, ESLint 10.10.0. Versioni esatte e transitive nel manifest/lockfile. Nessun backend o remote Git.
+App React 19.3.0, TypeScript 6.0.3, Vite 8.3.0, idb 8.0.3, Zod 4.6.4. Node 24.15.0/npm 12.0.2 verificati. Vitest 5.0.0, Playwright 1.63.0, ESLint 10.10.0. Versioni esatte e transitive nel manifest/lockfile. Nessun backend applicativo. Repository GitHub origin configurato su richiesta: https://github.com/Enomizzio/FatReduction.git.
 
 Navigazione hash con link nativi, senza router aggiuntivo. Dev e preview su `http://127.0.0.1:5173`, loopback e strictPort. Build con asset locali e font di sistema. Compatibilità verificata su metadata npm e guide primarie Vite/Vitest il 2026-09-13; Node 24.15 soddisfa i requisiti. Scelte in ADR-004.
 
 GATE 02 implementa domain/nutrition (schema e calcoli), services/catalog (transazioni e revisioni), features/Catalog, FoodForm e RecipeForm; dettagli condivisi in components. IndexedDB v2 con cinque store e migrazione additiva da v1. Nessuna dipendenza aggiuntiva rispetto alla fondazione. Fonti manuali e conversioni in ADR-005.
 
 GATE 03 aggiunge domain/menu, services/menu, features/Menu e components/MealItems. IndexedDB v3 aggiunge piani, revisioni, pasti e selezioni per data, con indici unici e migrazione additiva. Data condivisa nella shell durante la navigazione; al reload si torna alla data locale attuale. Nessuna nuova dipendenza.
+
+GATE 04 aggiunge domain/diary, services/diary e features/Diary condivisa da Oggi e Diario. IndexedDB v4 con dailyDiaries, consumedEntries e bodyMeasurements; diario, consumi e misurazione salvati in una transazione. Riferimento al piano congelato, cambio esplicito con conservazione delle occasioni occupate. La shell protegge le bozze di menù/diario quando si cambia area o si ricarica. Nessuna nuova dipendenza, nessun grafico o backup anticipato.
 
 ## Componenti — ADR-001
 
@@ -34,7 +36,7 @@ src/domain/             Entità, validazioni e calcoli puri
 src/services/           Operazioni applicative e contratti
 src/storage/            Adapter IndexedDB, schema e migrazioni
 src/components/         Controlli e presentazione condivisa
-tests/                  Test integrazione e, successivamente, e2e
+tests/                  Test unitari, integrazione ed e2e Chromium
 ```
 
 GATE 01 introduce queste cartelle, profilo e adapter. Schema reale in DATA_MODEL; funzioni successive restano nei rispettivi Gate.
