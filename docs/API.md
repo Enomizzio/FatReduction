@@ -1,0 +1,63 @@
+# Confini locali e formato backup
+
+## Stato attuale
+
+Nessun backend o endpoint dati. Vite serve asset locali. Adapter implementa `initializeProfile(name?)` e `saveProfile(profile, expectedUpdatedAt, name?)`, asincroni con validazione e attesa commit. Nome database parametrico per test isolati. `errorMessage` traduce errori Zod, quota, versione e accesso; conflitti richiedono riapertura del form. Altri confini sotto sono pianificati finché introdotti nei rispettivi Gate.
+
+## Confini dei moduli
+
+| Modulo | Operazioni previste | Vincoli |
+| --- | --- | --- |
+| ProfileService | Lettura, inizializzazione una volta, modifica profilo | Un profilo; default non sovrascrivono valori salvati |
+| CatalogService | Gestione alimenti e ricette, archiviazione | Fonti, revisioni, quantità e ingredienti validati |
+| NutritionCalculator | Calcolo voce e aggregazione | Funzioni pure, unità esplicite, fibre sconosciute conservate |
+| MenuService | Creazione/revisione piano, scelta piano per data | Cinque slot, revisioni immutabili ed esclusioni sulle proposte |
+| DiaryService | Apertura giornata, consumi, stato completo e peso | Pianificato separato; data locale, snapshot storici |
+| ProgressService | Riepiloghi e andamento per intervallo | Solo dati disponibili, nessun indicatore sanitario inventato |
+| BackupService | Export, validazione, anteprima, import sostitutivo | Nessuna rete, versioni supportate e transazione atomica |
+| StorageAdapter | CRUD, indici, transazioni e migrazioni | Errori espliciti; servizi indipendenti dall'API IndexedDB |
+
+Operazioni asincrone per persistenza; errori distinguibili: `validation`, `notFound`, `conflict`, `storageUnavailable`, `quotaExceeded`, `unsupportedVersion`, `invalidBackup`. Le firme concrete e il formato degli errori saranno fissati quando il modulo viene introdotto; non aggiungere livelli senza responsabilità reale.
+
+## Backup JSON — proposta per GATE 06
+
+Formato completo locale, file UTF-8 suggerito `fatreduction-backup-YYYY-MM-DD.json`. Nessuna cifratura o import già implementati. Envelope previsto:
+
+```json
+{
+  "format": "fatreduction-backup",
+  "formatVersion": 1,
+  "exportedAt": "2026-09-13T00:00:00Z",
+  "appVersion": "versione-da-package-manifest",
+  "data": {
+    "profiles": [],
+    "bodyMeasurements": [],
+    "foods": [],
+    "recipes": [],
+    "menuPlans": [],
+    "menuPlanRevisions": [],
+    "plannedMeals": [],
+    "dayPlanSelections": [],
+    "dailyDiaries": [],
+    "consumedEntries": []
+  }
+}
+```
+
+Esempio strutturale fittizio: gli array vuoti non costituiscono un backup reale valido; il backup reale deve contenere esattamente un profilo. I campi delle entità corrispondono al modello dati effettivo, che GATE 06 renderà uno schema verificabile. Non esportare cache, riepiloghi derivati, log o configurazione tecnica non necessaria. L'ordine degli array non modifica il significato; ID e relazioni sì.
+
+`formatVersion` descrive il contratto portabile e non coincide necessariamente con la versione IndexedDB. Un nuovo schema richiede migrazione esplicita e test; versioni sconosciute non sono reinterpretate automaticamente.
+
+## Importazione prevista
+
+1. Controllare dimensione del file e parse JSON senza eseguire contenuti. Limiti iniziali proposti: 20 MiB e 100.000 record complessivi, da misurare in GATE 06.
+2. Validare envelope, versione, campi ammessi, tipi, date, numeri, unità, unicità, riferimenti e invarianti di [DATA_MODEL](DATA_MODEL.md). Rifiutare chiavi pericolose per prototype pollution.
+3. Preparare l'intero risultato prima di scrivere e mostrare conteggi, date e dati che saranno sostituiti.
+4. Ottenere conferma esplicita per modalità sostitutiva; merge non previsto nella prima release. Proporre un backup dei dati correnti.
+5. Applicare in un'unica transazione; su errore conservare i dati originali. Aggiornare UI solo dopo commit della transazione.
+
+Gli URL delle fonti sono testo validato, mai istruzioni per scaricare dati. Note e HTML importati non devono essere eseguiti.
+
+## Esportazioni future
+
+CSV del diario e JSON parziali sono estensioni dopo il backup completo; schema e mitigazione delle formule CSV da definire prima dell'implementazione. Nessuna API cloud, chiave o integrazione nutrizionale esterna è richiesta nella prima release.

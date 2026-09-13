@@ -1,0 +1,42 @@
+# Dipendenze e output rigenerabili
+node_modules/
+dist/
+build/
+coverage/
+.vite/
+.cache/
+*.tsbuildinfo
+playwright-report/
+test-results/
+blob-report/
+
+# Segreti: solo un eventuale esempio senza valori reali è versionabile
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Backup e dati personali: usare queste cartelle per esportazioni locali
+/backups/
+/exports/
+/local-data/
+/private/
+fatreduction-backup-*.json
+fatreduction-export-*.json
+fatreduction-export-*.csv
+*.db
+*.sqlite
+*.sqlite3
+
+# Log, file temporanei ed editor
+*.log
+*.tmp
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
