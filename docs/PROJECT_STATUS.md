@@ -31,11 +31,10 @@ GATE 01 e 02 PASS. Ultima esecuzione: 12 test Vitest in 3 file, 4 scenari Playwr
 
 ### Infrastructure
 
-Node 24.15.0, npm 12.0.2, Git 2.55.0. Versioni esatte e package-lock.json; zero vulnerabilità segnalate dall'installazione npm del 2026-09-13. Avvio npm.cmd run dev, build npm.cmd run build, preview npm.cmd run preview. Git locale su main, nessun remote; checkpoint come Git tree in refs/checkpoints/gate-01 e refs/checkpoints/gate-02. Identità Git assente, nessun commit e nessuna identità inventata; file preparati nell'index.
+Node 24.15.0, npm 12.0.2, Git 2.55.0. Versioni esatte e package-lock.json; zero vulnerabilità segnalate dall'installazione npm del 2026-09-13. Avvio npm.cmd run dev, build npm.cmd run build, preview npm.cmd run preview. Git locale su main, nessun remote. Identità fornita dall'utente e configurata solo in questo repository. Commit creati dai checkpoint originali: `8554bd2` (bootstrap e GATE 01), `f513bb0` (GATE 02, figlio del primo). Gli snapshot tree refs/checkpoints/gate-01 e refs/checkpoints/gate-02 restano conservati. Aggiornamento Git/documentale senza modifiche applicative.
 
 ## Known Issues
 
-- Nome/email Git non configurati: possibile creare snapshot Git, commit rinviato.
 - Backup e import solo in GATE 06: versione intermedia, non release completa. Pulire i dati del sito elimina l'archivio.
 - Dati separati per browser, origine e dispositivo; LAN, PWA e cifratura backup non implementati.
 - Catalogo inizialmente vuoto, nessun database alimentare esterno incluso. Per prodotti composti l'utente deve dichiarare gli ingredienti per le esclusioni; nessuna verifica allergeni automatica.
@@ -43,7 +42,7 @@ Node 24.15.0, npm 12.0.2, Git 2.55.0. Versioni esatte e package-lock.json; zero 
 
 ## Current Blockers
 
-Nessun blocco applicativo. Identità Git assente impedisce soltanto i commit; i due checkpoint sono conservati come snapshot tree referenziati, consultabili con git ls-tree -r refs/checkpoints/gate-01 oppure gate-02.
+Nessun blocco attuale. Il precedente blocco dei commit è risolto con l'identità fornita dall'utente: entrambi i Gate hanno un commit su main, con alberi identici ai rispettivi checkpoint.
 
 ## Next Objective
 

@@ -24,7 +24,7 @@ idb 8.0.3 per transazioni con attesa del commit, Zod 4.6.4 per validare dominio 
 
 Dev e preview condividono 127.0.0.1:5173 con strictPort: origine stabile e nessun binding LAN. Database versione 1 con solo profiles; default in transazione idempotente e confronto updatedAt contro scritture obsolete tra schede. Numero pasti derivato dagli slot ordinati, configurabili da 1 a 10.
 
-Playwright introdotto subito per persistenza reale, navigazione e viewport; axe integra la review visiva. Alternative: IndexedDB nativo richiede più plumbing; router completo e store globale non necessari. Nessun backend o PWA. Identità Git assente: non inventarla e registrare il checkpoint incompleto senza bloccare lo sviluppo autorizzato.
+Playwright introdotto subito per persistenza reale, navigazione e viewport; axe integra la review visiva. Alternative: IndexedDB nativo richiede più plumbing; router completo e store globale non necessari. Nessun backend o PWA. All'epoca identità Git assente: checkpoint tree conservati senza inventarla. Dopo la comunicazione dell'identità da parte dell'utente, configurazione solo locale e creazione dei commit `8554bd2` e `f513bb0` in sequenza, mantenendo esattamente gli alberi salvati e i riferimenti originali.
 
 ## ADR-001 — Frontend locale con React, TypeScript, Vite e IndexedDB
 

@@ -85,7 +85,7 @@ Started: 2026-09-13, dopo PASS e checkpoint di GATE 01; richiesta dei due Gate g
 
 Completed: 2026-09-13.
 
-Git commit / reference: refs/checkpoints/gate-02, snapshot Git tree. Nessun commit perché identità Git non configurata.
+Git commit / reference: `f513bb0`, figlio del commit GATE 01 `8554bd2`, creato con l'identità successivamente fornita dall'utente. Albero identico a refs/checkpoints/gate-02; snapshot originale conservato.
 
 ## Notes
 

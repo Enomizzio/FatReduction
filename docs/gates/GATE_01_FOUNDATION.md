@@ -88,11 +88,11 @@ Started: 2026-09-13, richiesta esplicita di implementare i prossimi due Gate (01
 
 Completed: 2026-09-13.
 
-Git commit / reference: refs/checkpoints/gate-01, snapshot Git tree senza commit. Identità Git assente, nessuna identità inventata.
+Git commit / reference: `8554bd2`, creato con l'identità successivamente fornita dall'utente. Albero identico a refs/checkpoints/gate-01; comprende anche il bootstrap. Snapshot originale conservato.
 
 ## Notes
 
-Git/Node/npm presenti nel sistema; esecuzione dai percorsi utente può richiedere accesso fuori sandbox. Configurare identità Git prima del primo commit. Questa tappa non dispone ancora di backup e non è la release completa.
+Git/Node/npm presenti nel sistema; esecuzione dai percorsi utente può richiedere accesso fuori sandbox. Identità Git ora configurata localmente e checkpoint trasformato in commit. Questa tappa non dispone ancora di backup e non è la release completa.
 
 ### Prove della Gate Review — 2026-09-13
 

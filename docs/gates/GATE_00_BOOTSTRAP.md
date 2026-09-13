@@ -90,7 +90,7 @@ Started: 2026-09-13.
 
 Completed: 2026-09-13.
 
-Git commit / reference: ramo `main`, file preparati nell'index locale; nessun commit, identità Git non configurata.
+Git commit / reference: bootstrap incluso nel primo commit `8554bd2` insieme a GATE 01, dopo la comunicazione dell'identità da parte dell'utente. Alla review originale il commit era rinviato per identità non configurata.
 
 ## Notes
 
@@ -98,4 +98,4 @@ Review del 2026-09-13: controllo documentale PASS su 26 file, parsing PowerShell
 
 Prompt originale preservato: 17.320 byte, SHA-256 `74016D2433BB1E29EC67683F395760254123B7607FF1BFCD9AE81219681CB0BF`. Nessuna modifica applicativa, dipendenza installata o piano alimentare definitivo.
 
-Versioni rilevate: Git 2.55.0.windows.3, Node.js 24.15.0, npm 12.0.2. Nome/email Git mancanti impediscono il primo commit con identità autentica; file preparati nell'index, nessuna identità inventata. Il comando del validatore usa una policy limitata al processo perché quella del PC blocca gli script per impostazione corrente.
+Versioni rilevate nel bootstrap: Git 2.55.0.windows.3, Node.js 24.15.0, npm 12.0.2. Alla review originale nome/email mancanti impedivano il primo commit; i file erano preparati nell'index, senza inventare un'identità. Il blocco è stato successivamente risolto con i dati forniti dall'utente. Il comando del validatore usa una policy limitata al processo perché quella del PC blocca gli script per impostazione corrente.
