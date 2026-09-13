@@ -30,6 +30,12 @@ GATE 01: npm ci, typecheck, lint, build, 3 test unitari/integrazione e 2 E2E PAS
 
 Nessun dato reale inserito nei test: default di configurazione autorizzati e fixture aritmetiche inventate. Nessun test obbligatorio N/A nei due Gate. Audit release completo, screen reader umano, backup/import, altri browser e PWA non dichiarati eseguiti; appartengono al perimetro futuro.
 
+## Evidenze GATE 03 — 2026-09-13
+
+17 test Vitest in 4 file PASS; 6 scenari Chromium PASS (4 preesistenti nella suite completa, 2 menù rieseguiti dopo correzione delle assunzioni del test su data al reload e segmenti del campo data nativo). Lint, type-check e build PASS. Migrazione v2/v3 preserva profilo e catalogo; revisioni e selezioni storiche, slot, esclusioni e rollback verificati. Percorso reale settimana, alternativa senza doppio conteggio, modifica quantità e reload; quota con bozza conservata e nuovo tentativo.
+
+Axe senza violazioni nelle viste esaminate; tastiera automatizzata e review visiva dell'agente su menu-today-desktop.png e menu-form-320.png. Screenshot in test-results ignorati da Git. Validatore documentale PASS registrato nella review. Nessun criterio obbligatorio rinviato al GATE 04; audit completo release ancora futuro.
+
 ## Strategia
 
 - Unitari: conversioni quantità, aggregazione, null delle fibre, date locali, validazioni, esclusioni e revisione. In GATE 01 coprire soltanto invarianti del profilo e inizializzazione senza sovrascrittura.

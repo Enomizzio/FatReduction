@@ -2,7 +2,7 @@
 
 ## Stato e convenzioni
 
-Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GATE 02. Entità GATE 03–06 ancora pianificate. Schema verificabile in domain/profile, domain/nutrition e storage/database.
+Profilo implementato in GATE 01; Food, Recipe, fonti, quantità e snapshot in GATE 02; piani, revisioni, pasti e selezioni in GATE 03. Entità GATE 04–06 ancora pianificate. Schema verificabile in domain/profile, domain/nutrition, domain/menu e storage/database.
 
 - `Id`: UUID stringa, generato localmente. `LocalDate`: data gregoriana reale `YYYY-MM-DD`, senza conversione automatica a UTC. `Instant`: timestamp ISO 8601 UTC per audit tecnico, non per decidere il giorno alimentare.
 - `number`: finito, mai `NaN`/infinito. Quantità positive, nutrienti non negativi. Precisione mantenuta nei calcoli, arrotondamento solo in presentazione.
@@ -74,6 +74,8 @@ Il servizio integra nome e alias tartufo/tartufi nelle chiavi. Per prodotti comp
 
 Modificare un piano crea una nuova revisione. La selezione futura può cambiarla esplicitamente; un diario già associato mantiene la precedente. Una revisione referenziata non può essere cancellata fisicamente senza un'operazione coerente e confermata.
 
+Implementazione GATE 03: creazione di uno o sette giorni consecutivi; titolo e intervallo del piano non cambiano nelle revisioni. Massimo 100 voci e 100 alternative per pasto. Nuove revisioni richiedono gli slot attuali del profilo: se un'occasione rimossa contiene voci/note, spostarle o rimuoverle dalla bozza prima di applicare la configurazione; la revisione salvata resta conservata. Selezione sempre esplicita, anche con un solo piano; salvare una revisione non cambia le selezioni esistenti. Alternative possono sostituire una voce scelta o aggiungersi esplicitamente; solo allora entrano nei totali. Fonti storiche autentiche e catalogo aggiornato verificati in transazione; voci già presenti possono mantenere fonti archiviate.
+
 ## DailyDiary — GATE 04
 
 `id: Id`, `profileId: Id`, `date: LocalDate`, `plannedRevisionId: Id/null`, `mealSlotsSnapshot: MealSlotDefinition[]`, `status: open/complete`, `activity: {description: string, durationMinutes: number/null}[]`, `hunger/energy/mood: integer 1–5/null`, `notes: string/null`, `createdAt/updatedAt: Instant`.
@@ -96,4 +98,6 @@ Le fibre aggregate sono `null` se almeno una voce ha fibre sconosciute; eventual
 
 Database `fatreduction`, versione 1 (GATE 01): store `profiles`, keyPath `id`. Unico profilo inizializzato in transazione readwrite, validato anche in lettura; numero pasti derivato. `dailyTargets` resta null. Nessuno store meta necessario: versione nativa IndexedDB. Scritture profilo confrontano `updatedAt` contro conflitti tra schede. Upgrade versionati additivi, nessun reset silenzioso; errori versione futura e timeout apertura bloccata comunicati. Store delle altre entità pianificati; contratto backup in [API](API.md).
 
-Versione corrente 2 (GATE 02): mantiene profiles e aggiunge foods/recipes (keyPath id), foodRevisions/recipeRevisions (keyPath composto [id, revision]). Revisioni come copie immutabili dei record validati; createdAt resta la creazione dell'entità, updatedAt indica la revisione. Testa e revisione atomiche, rollback verificato con collisione nello storico. Ricette con ingredienti/snapshot, resa e istruzioni, mai nutrienti totali persistiti. Riferimenti ai foodRevisions verificati in transazione; archiviazione reversibile incrementa revision. Nessuno store dei Gate futuri.
+Versione 2 (GATE 02): mantiene profiles e aggiunge foods/recipes (keyPath id), foodRevisions/recipeRevisions (keyPath composto [id, revision]). Revisioni come copie immutabili dei record validati; createdAt resta la creazione dell'entità, updatedAt indica la revisione. Testa e revisione atomiche, rollback verificato con collisione nello storico. Ricette con ingredienti/snapshot, resa e istruzioni, mai nutrienti totali persistiti. Riferimenti ai foodRevisions verificati in transazione; archiviazione reversibile incrementa revision.
+
+Versione corrente 3 (GATE 03): aggiunge menuPlans, menuPlanRevisions, plannedMeals e dayPlanSelections, tutti con keyPath id. Indici unici rispettivamente sulle revisioni [menuPlanId, revisionNumber], sui pasti [revisionId, date, slot], sulle selezioni [profileId, date]. Testa/revisione/pasti salvati atomicamente, revisione attesa e updatedAt della selezione contro conflitti. Nessuno store dei Gate futuri.

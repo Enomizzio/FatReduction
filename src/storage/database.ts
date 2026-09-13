@@ -1,6 +1,7 @@
 import { openDB, type DBSchema, type IDBPDatabase } from 'idb'
 import { defaultProfile, profileSchema, type Profile } from '../domain/profile'
 import type { Food, Recipe } from '../domain/nutrition'
+import type { MenuPlan, MenuRevision, PlannedMeal, DayPlanSelection } from '../domain/menu'
 
 interface Database extends DBSchema {
   profiles: { key: string; value: Profile }
@@ -8,9 +9,13 @@ interface Database extends DBSchema {
   foodRevisions: { key: [string, number]; value: Food }
   recipes: { key: string; value: Recipe }
   recipeRevisions: { key: [string, number]; value: Recipe }
+  menuPlans: { key: string; value: MenuPlan }
+  menuPlanRevisions: { key: string; value: MenuRevision; indexes: { planRevision: [string, number] } }
+  plannedMeals: { key: string; value: PlannedMeal; indexes: { revisionDateSlot: [string, string, string] } }
+  dayPlanSelections: { key: string; value: DayPlanSelection; indexes: { profileDate: [string, string] } }
 }
 export const DATABASE_NAME = 'fatreduction'
-export const DATABASE_VERSION = 2
+export const DATABASE_VERSION = 3
 
 export async function openDatabase(name = DATABASE_NAME) {
   const opening = openDB<Database>(name, DATABASE_VERSION, {
@@ -21,6 +26,12 @@ export async function openDatabase(name = DATABASE_NAME) {
         db.createObjectStore('foodRevisions', { keyPath: ['id', 'revision'] })
         db.createObjectStore('recipes', { keyPath: 'id' })
         db.createObjectStore('recipeRevisions', { keyPath: ['id', 'revision'] })
+      }
+      if (oldVersion < 3) {
+        db.createObjectStore('menuPlans', { keyPath: 'id' })
+        db.createObjectStore('menuPlanRevisions', { keyPath: 'id' }).createIndex('planRevision', ['menuPlanId', 'revisionNumber'], { unique: true })
+        db.createObjectStore('plannedMeals', { keyPath: 'id' }).createIndex('revisionDateSlot', ['revisionId', 'date', 'slot'], { unique: true })
+        db.createObjectStore('dayPlanSelections', { keyPath: 'id' }).createIndex('profileDate', ['profileId', 'date'], { unique: true })
       }
     },
     blocked() { /* Il timeout sotto comunica un errore recuperabile alla UI. */ },

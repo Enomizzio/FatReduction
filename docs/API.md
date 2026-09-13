@@ -27,6 +27,13 @@ Errori Zod e DOMException tradotti senza payload personali. La UI aggiorna il ca
 
 Operazioni asincrone per persistenza; errori distinguibili: `validation`, `notFound`, `conflict`, `storageUnavailable`, `quotaExceeded`, `unsupportedVersion`, `invalidBackup`. Le firme concrete e il formato degli errori saranno fissati quando il modulo viene introdotto; non aggiungere livelli senza responsabilità reale.
 
+Implementati in GATE 03 in services/menu:
+
+- `readMenus(profileId, name?)`: piani, revisioni, pasti e selezioni validati; storico interamente ricostruibile.
+- `saveMenu(bundle, expectedRevisionId, name?)`: null per creazione; testa attesa per nuova revisione, commit atomico e ritorno del bundle salvato. Verifica profilo, occasioni, date, snapshot, esclusioni, riferimenti al catalogo e aggregati finiti.
+- `selectDayPlan(profileId, date, revisionId, expectedUpdatedAt, name?)`: scelta esplicita e unica per data con controllo conflitti; non aggiorna altri dati.
+- `newMenu`, `reviseMenu`, `applySlots`, `chooseSubstitution`, `menuTotal`, `todayLocal`, `addDays`: dominio puro e date gregoriane senza conversione del giorno locale in UTC.
+
 ## Backup JSON — proposta per GATE 06
 
 Formato completo locale, file UTF-8 suggerito `fatreduction-backup-YYYY-MM-DD.json`. Nessuna cifratura o import già implementati. Envelope previsto:

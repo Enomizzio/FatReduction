@@ -38,6 +38,10 @@ L'app richiede una conferma esplicita che descriva l'ambito: archivio locale del
 
 URL fonte limitati a http/https e 2.000 caratteri, nessun fetch automatico; note e istruzioni renderizzate come testo React. Browser test verifica istruzioni simili a script inerti e rifiuto URL javascript. Input e record catalogo validati, riferimenti snapshot controllati in transazione, conflitti espliciti e rollback provato. Archiviazione reversibile conserva tutte le revisioni; nessuna cancellazione fisica o import introdotti.
 
+## Verifiche GATE 03
+
+Piani e scelte giornaliere validati in transazione, snapshot confrontati con revisioni reali del catalogo, conflitti e rollback verificati. Nessun consumo inventato né dato personale di test. Note renderizzate come testo; bozze conservate dopo quota esaurita, scarto esplicitamente confermato. Test e screenshot usano contesti browser isolati. Pubblicazione del codice e documentazione su GitHub richiesta dall'utente; nessun backup, log o dato del suo browser incluso.
+
 ## Verifiche richieste prima della release
 
 Import ostile e rollback, assenza di rete obbligatoria e di segreti nei bundle, contenuti note inerti, errori storage recuperabili, conferme e annullamento, persistenza su origine stabile, gestione multi-tab e rischi export comprensibili. Lo stato reale di queste verifiche sarà registrato in GATE 06, senza considerarle già soddisfatte dalla documentazione.

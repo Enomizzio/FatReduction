@@ -2,7 +2,7 @@ import { openDB } from 'idb'
 import { describe, expect, it } from 'vitest'
 import { defaultProfile } from '../src/domain/profile'
 import { calculate, makeQuantity, recipeSnapshot } from '../src/domain/nutrition'
-import { initializeProfile, openDatabase } from '../src/storage/database'
+import { DATABASE_VERSION, initializeProfile, openDatabase } from '../src/storage/database'
 import { readCatalog, saveFood, saveRecipe } from '../src/services/catalog'
 import { sampleFood, sampleRecipe } from './fixtures'
 
@@ -14,7 +14,7 @@ describe('Catalogo persistente', () => {
     expect(await initializeProfile(name)).toEqual(profile)
     expect(await readCatalog(name)).toEqual({ foods: [], recipes: [] })
     const db = await openDatabase(name)
-    expect(db.version).toBe(2); expect([...db.objectStoreNames]).toEqual(['foodRevisions', 'foods', 'profiles', 'recipeRevisions', 'recipes']); db.close()
+    expect(db.version).toBe(DATABASE_VERSION); expect([...db.objectStoreNames]).toEqual(expect.arrayContaining(['foodRevisions', 'foods', 'profiles', 'recipeRevisions', 'recipes'])); db.close()
     const futureName = crypto.randomUUID(), future = await openDB(futureName, 99); future.close()
     await expect(openDatabase(futureName)).rejects.toMatchObject({ name: 'VersionError' })
   })

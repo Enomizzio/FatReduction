@@ -33,6 +33,13 @@ p { margin: 0 0 18px; }
 .page-header p:not(.eyebrow), .panel > p, .muted { color: #5b6b61; font-size: 14px; }
 .badge { display: inline-block; background: #edf1e8; color: #405c43; padding: 6px 11px; font-size: 11px; border: 1px solid #d8e1d0; border-radius: 30px; white-space: nowrap; }
 .stack { display: grid; gap: 23px; }
+.meal-card { padding: 20px 0; border-top: 1px solid #dce2d7; min-width: 0; }
+.meal-card h3 { color: #315b43; }
+.menu-day { min-width: 0; }
+.item-details { overflow-wrap: anywhere; }
+.item-details + .item-details { margin-top: 20px; }
+.field textarea { min-height: 80px; resize: vertical; }
+input[type=date] { min-width: 0; max-width: 100%; }
 .panel { background: #fffefa; border: 1px solid #dce2d7; border-radius: 14px; padding: 28px; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 24px; margin: 24px 0; }

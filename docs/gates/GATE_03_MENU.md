@@ -2,7 +2,7 @@
 
 ## Status
 
-NOT STARTED
+COMPLETED
 
 ## Objective
 
@@ -57,36 +57,42 @@ Prima dell'implementazione leggere:
 
 Il Gate è completo quando:
 
-- [ ] Piano giornaliero/settimanale creato, consultato e salvato con cinque slot per data nel profilo iniziale; modifica delle occasioni conserva lo storico e vale per nuove revisioni.
-- [ ] Quantità, unità, fonte e calorie/macro sono visibili; note e sostituzioni funzionano senza doppi conteggi.
-- [ ] Tartufo e ingredienti esclusi non compaiono nelle proposte o sostituzioni.
-- [ ] Modifica produce nuova revisione e la precedente resta ricostruibile dopo reload.
-- [ ] Sovrapposizioni e slot vuoti sono gestiti esplicitamente; nessun consumo reale inventato.
-- [ ] Test pertinenti, lint, type-check, build e percorso browser passano; documentazione aggiornata.
+- [x] Piano giornaliero/settimanale creato, consultato e salvato con cinque slot per data nel profilo iniziale; modifica delle occasioni conserva lo storico e vale per nuove revisioni.
+- [x] Quantità, unità, fonte e calorie/macro sono visibili; note e sostituzioni funzionano senza doppi conteggi.
+- [x] Tartufo e ingredienti esclusi non compaiono nelle proposte o sostituzioni.
+- [x] Modifica produce nuova revisione e la precedente resta ricostruibile dopo reload.
+- [x] Sovrapposizioni e slot vuoti sono gestiti esplicitamente; nessun consumo reale inventato.
+- [x] Test pertinenti, lint, type-check, build e percorso browser passano; documentazione aggiornata.
 
 ## Validation
 
-- [ ] Unit test — cinque slot, date, esclusioni e conteggio sostituzioni.
-- [ ] Integration test — revisioni, selezione giornaliera e migrazioni.
-- [ ] End-to-end test — creazione/modifica/reload; se rinviato a 04 registrare motivazione e prova manuale equivalente.
-- [ ] Lint
-- [ ] Type-check
-- [ ] Build
-- [ ] Verifica manuale — giorno/settimana, tastiera e viewport piccolo.
-- [ ] Validatore documentale e prove registrate.
+- [x] Unit test — cinque slot, date, esclusioni e conteggio sostituzioni.
+- [x] Integration test — revisioni, selezione giornaliera e migrazioni.
+- [x] End-to-end test — creazione/modifica/reload; se rinviato a 04 registrare motivazione e prova manuale equivalente.
+- [x] Lint
+- [x] Type-check
+- [x] Build
+- [x] Verifica manuale — giorno/settimana, tastiera e viewport piccolo.
+- [x] Validatore documentale e prove registrate.
 
 ## Gate Result
 
-`NOT EVALUATED`
+`PASS`
 
 ## Completion Information
 
-Started: non iniziato.
+Started: 2026-09-13, richiesta esplicita di proseguire con GATE 03 e 04; successiva richiesta di pubblicare su GitHub.
 
-Completed: non completato.
+Completed: 2026-09-13.
 
-Git commit / reference: da registrare al completamento.
+Git commit / reference: checkpoint con messaggio `feat: complete gate 03 menu planning and immutable revisions`; pubblicazione GitHub autorizzata.
 
 ## Notes
 
 Il menù è uno strumento di organizzazione con stime; non un piano clinico. La vista mensile appartiene a GATE 05.
+
+### Prove di completamento — 2026-09-13
+
+17 test Vitest / 4 file PASS, 6 scenari Chromium PASS (suite e riesecuzione mirata menù), lint, type-check e build PASS. Test coprono date gregoriane e cambio anno, cinque slot/35 settimanali, alternative senza doppio conteggio, esclusioni anche da ricetta, modifica/reload, fonti storiche e occasioni, sovrapposizioni e selezione esplicita, migrazione v2/v3 senza perdita, conflitti e rollback. Quota simulata nel browser: bozza conservata e nuovo tentativo riuscito.
+
+Review visiva dell'agente su screenshot desktop e 320 px; giorno/settimana e tastiera verificati nel browser automatizzato. Axe senza violazioni nelle viste esaminate. Non equivale a screen reader umano o audit release completo. Nessuna verifica obbligatoria rinviata o N/A. Validatore documentale eseguito alla chiusura; dettagli in TESTING. Storico e note persistiti solo con fixture fittizie.

@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { defaultProfile, parseDecimal, profileSchema } from '../src/domain/profile'
-import { initializeProfile, openDatabase, saveProfile } from '../src/storage/database'
+import { DATABASE_VERSION, initializeProfile, openDatabase, saveProfile } from '../src/storage/database'
 import { ProfileForm } from '../src/features/ProfileForm'
 
 describe('Profilo', () => {
@@ -22,7 +22,7 @@ describe('Profilo', () => {
     expect(await initializeProfile(name)).toEqual(saved)
     await expect(saveProfile(first, first.updatedAt, name)).rejects.toThrow('altra scheda')
     const db = await openDatabase(name)
-    expect(db.version).toBe(2)
+    expect(db.version).toBe(DATABASE_VERSION)
     expect(await db.count('profiles')).toBe(1)
     db.close()
   })

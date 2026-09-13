@@ -6,6 +6,8 @@ Layout, sei destinazioni hash e impostazioni implementati; aree future con stato
 
 GATE 02 aggiunge Alimenti/Ricette: ricerca, attivi/archiviati, creazione, modifica, archiviazione e ripristino. Schede con base/unità, nutrienti, fonti, esclusioni e calcolatore quantità. Fibre mancanti: Non disponibile. Form alimenti con provenienza obbligatoria e porzioni dichiarate; form ricette con snapshot ingredienti, quantità modificabili, resa e istruzioni. Fonti storiche conservate anche con alimento archiviato. Focus al titolo all'apertura form, al titolo pagina alla chiusura. Avvisi esclusioni descrittivi, senza impedire conservazione nel catalogo. Menù, diario, dashboard e backup futuri.
 
+GATE 03 implementa Menù: bozza giorno/settimana, cinque slot iniziali, quantità in g/ml o porzioni dichiarate, fonti, note, alternative non conteggiate, nuova revisione e consultazione dello storico. Selezione esplicita del piano per data, avviso sovrapposizioni e applicazione delle occasioni attuali senza cancellare revisioni. Oggi mostra il pianificato selezionato. Data mantenuta navigando tra le aree, reset alla data locale attuale dopo reload. Voci di catalogo filtrate per esclusioni; nessuna proposta automatica. Errori di commit conservano la bozza, scarto della bozza confermato. Diario, dashboard e backup ancora futuri.
+
 ## Navigazione e schermate
 
 | Area | Contenuto previsto | Gate |

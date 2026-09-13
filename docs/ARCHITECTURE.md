@@ -8,6 +8,8 @@ Navigazione hash con link nativi, senza router aggiuntivo. Dev e preview su `htt
 
 GATE 02 implementa domain/nutrition (schema e calcoli), services/catalog (transazioni e revisioni), features/Catalog, FoodForm e RecipeForm; dettagli condivisi in components. IndexedDB v2 con cinque store e migrazione additiva da v1. Nessuna dipendenza aggiuntiva rispetto alla fondazione. Fonti manuali e conversioni in ADR-005.
 
+GATE 03 aggiunge domain/menu, services/menu, features/Menu e components/MealItems. IndexedDB v3 aggiunge piani, revisioni, pasti e selezioni per data, con indici unici e migrazione additiva. Data condivisa nella shell durante la navigazione; al reload si torna alla data locale attuale. Nessuna nuova dipendenza.
+
 ## Componenti — ADR-001
 
 | Componente | Scelta iniziale | Responsabilità |

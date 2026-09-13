@@ -1,5 +1,15 @@
 # Decisioni importanti
 
+## ADR-006 — Piani da uno/sette giorni, selezioni esplicite e revisioni atomiche
+
+Status: Accepted — 2026-09-13, GATE 03.
+
+IndexedDB v3 aggiunge quattro store normalizzati senza riepiloghi duplicati. Titolo e intervallo restano stabili nel piano; modifica delle voci e occasioni crea una revisione immutabile con pasti nuovi. Limite iniziale di sette giorni consecutivi, creazione UI giorno/settimana. Se un'occasione rimossa contiene dati, applicare gli slot attuali richiede prima la loro sistemazione nella bozza: nessuna perdita automatica dello storico.
+
+Ogni data richiede una scelta esplicita del piano, anche senza sovrapposizioni. Nuove revisioni non aggiornano selezioni esistenti; il futuro diario congelerà il riferimento. Alternative escluse dai totali finché scelte per sostituire una voce o aggiungersi. Tutte le proposte nuove rispettano esclusioni correnti, incluse ricette, e fonti verificabili. Revisioni storiche restano leggibili anche dopo cambi del profilo/catalogo. Nessuna generazione di piano personale o target energetico.
+
+Data della UI condivisa tra aree durante la sessione React; reload torna a oggi, la selezione di una data storica è esplicita. Nessuna dipendenza aggiunta. Checkpoint GATE 03 e successivo GATE 04 autorizzati anche alla pubblicazione su GitHub dall'utente; origin inizialmente privo di riferimenti.
+
 ## ADR-005 — Catalogo manuale, revisioni immutabili e resa dichiarata
 
 Status: Accepted — 2026-09-13, GATE 02.
